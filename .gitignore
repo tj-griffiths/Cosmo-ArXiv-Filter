@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+venv/
+user_config.txt
+
+# regenerable pipeline artifacts
+papers_raw.json
+papers_summarized.json
+embedding_ids.json
+*.npy
