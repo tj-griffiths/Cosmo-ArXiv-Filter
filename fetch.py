@@ -1,6 +1,8 @@
 import feedparser  # parses the Atom/RSS XML response into Python objects
 import json
 import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import requests
 
 # Config:
@@ -28,7 +30,9 @@ CATEGORIES = [
 ]
 
 # Set up user agent for requests to arXiv API (to avoid being blocked):
-USER_AGENT = "cosmo-arxiv-filter/0.1 (personal research paper filter; contact: tjamesgriffiths2002@gmail.com)"
+with open("user_config.txt") as f:
+    USER_EMAIL = f.read().strip()
+USER_AGENT = "cosmo-arxiv-filter/0.1 (personal research paper filter; contact: {USER_EMAIL})"
 
 # Clean up arXiv's packed feed
 
@@ -41,6 +45,12 @@ def parse_description(raw_description: str) -> tuple[str, str]:
     
     # Fallback: strip a leading arXiv ID and announce type if present
     return re.sub(r"^arXiv:\S+\s*Announce Type:\s*\S+\s*", "", text, flags=re.IGNORECASE).strip()
+
+def is_weekend_in_arxiv_timezone() -> bool:
+    # Checks if today is Saturday or Sunday in arXiv's timezone (US/Eastern)
+
+    eastern_now = datetime.now(ZoneInfo("America/New_York"))
+    return eastern_now.weekday() >= 5  # 5 = Saturday, 6 = Sunday
 
 # Fetch Today's feed for all categories
 
@@ -105,9 +115,17 @@ def fetch_today(categories: list[str]) -> list[dict]:
 # Entry point
 
 if __name__ == "__main__":
-    today_papers = fetch_today(CATEGORIES)
+    if is_weekend_in_arxiv_timezone():
+        print("Today is a weekend in arXiv's timezone (US/Eastern). No new papers are posted on weekends.")
+        print("Exiting without fetching papers.")
+    else:
+        papers = fetch_today(CATEGORIES)
 
-    with open(OUTPUT_FILE, "w") as f:
-        json.dump(today_papers, f, indent=2)
+        if not papers:
+            print(f"\n No papers fetched - leaving {OUTPUT_FILE} unchanged.")
+        
+        else:
+            with open(OUTPUT_FILE, "w") as f:
+                json.dump(papers, f, indent=2)
 
-    print(f"\nSaved {len(today_papers)} papers to {OUTPUT_FILE}.")
+            print(f"\nSaved {len(papers)} papers to {OUTPUT_FILE}.")
