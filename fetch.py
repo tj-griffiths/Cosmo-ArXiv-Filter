@@ -4,6 +4,7 @@ import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import requests
+from text_utils import clean_latex
 
 # Config:
 # Picks arXiv category codes
@@ -46,6 +47,7 @@ def parse_description(raw_description: str) -> tuple[str, str]:
     # Fallback: strip a leading arXiv ID and announce type if present
     return re.sub(r"^arXiv:\S+\s*Announce Type:\s*\S+\s*", "", text, flags=re.IGNORECASE).strip()
 
+# Check for weekends before fetching, since arXiv does not post new papers on weekends
 def is_weekend_in_arxiv_timezone() -> bool:
     # Checks if today is Saturday or Sunday in arXiv's timezone (US/Eastern)
 
@@ -101,7 +103,7 @@ def fetch_today(categories: list[str]) -> list[dict]:
 
         papers.append({
             "arxiv_id": arxiv_id,
-            "title": " ".join(entry.title.split()), # clean up whitespace
+            "title": clean_latex(" ".join(entry.get("title", "").split())),            
             "abstract": abstract,
             "authors": authors,
             "categories": ", ".join(categories_found) if categories_found else "unknown",

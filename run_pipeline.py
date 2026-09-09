@@ -1,4 +1,5 @@
 # Orchestrates the Cosmo pipeline from end to end
+# To run the entire pipeline, simply run: "python run_pipeline.py"
 
 import argparse
 import subprocess
@@ -46,12 +47,12 @@ def main() -> None:
         default=[],
         metavar ="STAGE",
         help="Stage names to skip, e.g. --skip fetch",
-    )
+    ) # Ex: python run_pipeline --skip fetch summarize
     parser.add_argument(
         "--only",
         metavar="STAGE",
         help="Run only the specified stage, e.g. --only summarize",
-    )
+    ) # Ex: python run_pipeline --only summarize
 
     args = parser.parse_args()
     stage_names = [name for name, _ in PIPELINE]
@@ -64,7 +65,7 @@ def main() -> None:
     else: 
         unknown = set(args.skip) - set(stage_names)
         if unknown:
-            print(f"Uknown stage(s) in --skip: {unknown}. Choices: {stage_names}")
+            print(f"Unknown stage(s) in --skip: {unknown}. Choices: {stage_names}")
             sys.exit(1)
         stages_to_run = [(name, script) for name, script in PIPELINE if name not in args.skip]
 

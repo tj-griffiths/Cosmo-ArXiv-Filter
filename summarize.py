@@ -2,6 +2,7 @@ import json
 import re
 
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from text_utils import clean_latex
 """
 HOW THE TRANSFORMERS PIPELINE WORKS
     `pipeline("summarization", model=...)` bundles three things:
@@ -17,61 +18,19 @@ OUTPUT_FILE = "papers_summarized.json"
 MODEL_NAME = "sshleifer/distilbart-cnn-6-6"
 """
 MODEL CHOICE: sshleifer/distilbart-cnn-6-6
-    Caveat worth knowing (and worth stating explicitly in interviews):
+    Caveat worth knowing:
     this model was fine-tuned on CNN/DailyMail *news* summarization, not
     scientific abstracts, so it summarizes a summary that's already
     dense and jargon-heavy. It will work, but a natural next iteration
     for this project is fine-tuning a small seq2seq model on a
     scientific-abstract summarization dataset (e.g. SciTLDR) instead of
-    relying on an off-the-shelf news summarizer. Flagging that gap is
-    itself a good sign of ML maturity — it's fine to ship v1 with a
-    known, named limitation.
+    relying on an off-the-shelf news summarizer.
 """
 
 BATCH_SIZE =  8
 MAX_SUMMARY_TOKENS = 100
 MIN_SUMMARY_TOKENS = 20
 MAX_INPUT_TOKENS = 1024
-
-# To handle LaTeX math in abstracts:
-_GREEK_LETTERS = [
-    "alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta",
-    "iota", "kappa", "lambda", "mu", "nu", "xi", "omicron", "pi", "rho",
-    "sigma", "tau", "upsilon", "phi", "chi", "psi", "omega",
-]
-
-def clean_latex(text: str) -> str:
-    text = re.sub(r"\\(?:mathrm|mathcal|mathbf|text|rm)\{([^{}]*)\}", r"\1", text)
-    for letter in _GREEK_LETTERS:
-        text = re.sub(rf"\\{letter}(?![a-zA-Z])", letter, text, flags=re.IGNORECASE)
-        text = re.sub(rf"\\{letter.capitalize()}(?![a-zA-Z])", letter.capitalize(), text)
-
-    replacements = {
-        r"\\times": "x",
-        r"\\pm": "+/-",
-        r"\\sim": "~",
-        r"\\approx": "~",
-        r"\\lesssim": "<~",
-        r"\\gtrsim": ">~",
-        r"\\odot": "solar",
-        r"\\ll": "<<",
-        r"\\gg": ">>",
-        r"\\rm": "",
-        r"\\[,;:!]": " ",  # thin/med/thick spacing commands -> a plain space
-    }
-
-    for pattern, repl in replacements.items():
-        text = re.sub(pattern, repl, text)
-
-    text = re.sub(r"\^\{([^{}]*)\}", r"^\1", text)  # superscripts
-    text = re.sub(r"_\{([^{}]*)\}", r"_\1", text)  # subscripts
-
-    text = text.replace("$", "")  # remove $ math delimiters
-    text = re.sub(r"\\[a-zA-Z]+\{([^{}]*)\}", r"\1", text) #\cmd{X} -> X
-    text = re.sub(r"\\[a-zA-Z]+", "", text)  # \cmd -> ""
-
-    text = " ".join(text.split())  # collapse whitespace
-    return text
 
 # Load papers:
 def load_papers(path:str) -> list[dict]:
@@ -130,7 +89,7 @@ def summarize_all(papers: list[dict]) -> list[dict]:
         print(f"  -> {min(start + BATCH_SIZE, len(abstracts_clean))}/{len(abstracts_clean)} abstracts summarized...")
 
     for paper, summary in zip(papers, summaries):
-        paper["short_description"] = summary.strip()
+        paper["short_description"] = clean_summary_text(summary.strip())
 
     return papers
 

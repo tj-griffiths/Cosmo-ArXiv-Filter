@@ -1,11 +1,16 @@
+# API Keys
+groq_api_key.txt
+
+# Python
 __pycache__/
 *.pyc
 .env
 venv/
 user_config.txt
 
-# regenerable pipeline artifacts
+# Regenerable pipeline artifacts
 papers_raw.json
 papers_summarized.json
 embedding_ids.json
 *.npy
+classifier.pkl

@@ -1,19 +1,16 @@
+# Sets up interactive command-line tool for building labels.csv for each paper
+
 import csv
 import json
 import os
 from datetime import datetime, timezone
 
+from api import generate as generate_with_api
+
 INPUT_FILE = "papers_summarized.json"
 LABELS_FILE = "labels.csv"
 
 CSV_FIELDS = ["arxiv_id", "title", "link", "label", "labeled_at"]
-
-DETAIL_MODEL_NAME = "google/flan-t5-base"   # Model for generating detailed summaries
-DETAIL_MAX_TOKENS = 150  # Max tokens for detailed summary
-
-# Cache so the model loads at most once per session, not once per "d"/"r" press
-_detail_tokenizer = None
-_detail_model = None  
 
 # Load papers
 
@@ -35,51 +32,32 @@ def write_labels(path: str, records: list[dict]) -> None:
         writer.writeheader()
         writer.writerows(records)
 
-def _ensure_detail_model_loaded() -> None:
-    # Loads Flan-T5 for first time it's needed and caches it in modeule
-    global _detail_tokenizer, _detail_model
-    if _detail_model is not None:
-        return
-    
-    from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-    print(f" (loading {DETAIL_MODEL_NAME} for detailed summaries - first run downloads ~1GB)...")
-    _detail_tokenizer = AutoTokenizer.from_pretrained(DETAIL_MODEL_NAME)
-    _detail_model = AutoModelForSeq2SeqLM.from_pretrained(DETAIL_MODEL_NAME)
 
-def _generate_with_flan(prompt: str) -> str:   
-    _ensure_detail_model_loaded()
-    inputs = _detail_tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)
-    output_ids = _detail_model.generate(**inputs, max_length=DETAIL_MAX_TOKENS, num_beams=4, early_stopping=True)
-    return _detail_tokenizer.decode(output_ids[0], skip_special_tokens=True).strip()
-
-def explain_simply(abstracts: str) -> str:
-    # Generates a simple explanation of the abstract using Flan-T5
-    from summarize import clean_latex
-    cleaned = clean_latex(abstracts)
+def explain_simply(abstract: str) -> str:
+    # Generates a simple explanation of the abstract using Groq API
+    from text_utils import clean_latex
+    cleaned = clean_latex(abstract)
     prompt = (
-        "Explain the following physics research abstract in 2-4 plain-language "
-        "sentences for a physicist working in a different subfield. Keep the "
-        "explanation scientifically accurate and preserve the key physical "
-        "meaning, but avoid unnecessary technical jargon.\n\n"
-        f"Abstract: {cleaned}\n\n"
-        "Plain-language explanation:"
+        "Explain the following physics research abstract to a curious "
+        "non-expert. In 3-5 simple sentences, cover: what problem or "
+        "question the researchers were addressing, what they actually "
+        "built or found, and why it matters.\n\n"
+        f"Abstract: {cleaned}"
     )
-    return _generate_with_flan(prompt)
+    return generate_with_api(prompt)
 
-def explain_result(abstracts: str) -> str:
-    # Plain-language explanation for results
-    from summarize import clean_latex
-    cleaned = clean_latex(abstracts)
-    prompt = ("Read the following physics research abstract. In 2-3 plain-language "
-        "sentences, explain specifically what the key result or finding was — "
-        "not the background, motivation, or methodology. Avoid unnecessary "
-        "technical jargon.\n\n"
-        f"Abstract: {cleaned}\n\n"
-        "Key result:")
-    
-    return _generate_with_flan(prompt)
-
-# Interactive labeling loop:
+def explain_result(abstract: str) -> str:
+    # Generates a plain-language explanation of the results using Groq API
+    from text_utils import clean_latex
+    cleaned = clean_latex(abstract)
+    prompt = (
+        "Explain the key result of the following physics research abstract "
+        "to a curious non-expert. In 2-3 simple sentences, cover: what "
+        "specifically they found (not the background or method), and why "
+        "that result matters.\n\n"
+        f"Abstract: {cleaned}"
+    )
+    return generate_with_api(prompt)
 
 _LABEL_DESCRIPTIONS = {"1": "relevant", "0": "not relevant"}
 
@@ -93,15 +71,19 @@ def prompt_for_label(paper: dict, current_label: str | None) -> str | None:
     "d" and "r" don't return, they print a detailed summary or result explanation and re-prompt for label.
     """
 
-    print("\n" + "="*70)
-    print(f"Title:    {paper['title']}")
-    print(f"Category: {paper.get('category', paper.get('categories', 'unknown'))}")
-    print(f"Summary:  {paper['short_description']}")
-    print(f"Link:     {paper['link']}")
-    if current_label is not None:
-        print(f"Current label: {_LABEL_DESCRIPTIONS.get(current_label, 'unknown')} - answering again will change this.")
-    print("="*70)
+    detail_text: str | None = None
+    result_text: str | None = None
 
+    def render() -> None:
+        print("\n" + "="*70)
+        print(f"Title:    {paper['title']}")
+        print(f"Category: {paper.get('category', paper.get('categories', 'unknown'))}")
+        print(f"Summary:  {paper['short_description']}")
+        print(f"Link:     {paper['link']}")
+        if current_label is not None:
+            print(f"Current label: {_LABEL_DESCRIPTIONS.get(current_label, 'unknown')} - answering again will change this.")
+        print("="*70)
+    render()
 
     while True:
         answer = input("Interested? (y/n/s(kip)/b(ack)/q(uit)/d(etail)/r(esult)): ").strip().lower()
@@ -109,23 +91,23 @@ def prompt_for_label(paper: dict, current_label: str | None) -> str | None:
             return "1"
         elif answer in ("n", "no"):
             return "0"
+        elif answer in ("d", "detail"):
+            if detail_text is None:
+                detail_text = explain_simply(paper["abstract"])
+            print(f"\n Detail Explanation: {detail_text}\n")
+        elif answer in ("r", "result"):
+            if result_text is None:
+                result_text = explain_result(paper["abstract"])
+            print(f"\n Result Explanation: {result_text}\n")
         elif answer in ("s", "skip"):
             return "skip"
         elif answer in ("b", "back"):
             return "back"
         elif answer in ("q", "quit"):
             return None
-        elif answer in ("d", "detail"):
-            explanation = explain_simply(paper["abstract"])
-            print("\n--- Detailed Explanation ---")
-            print(f"\n Plain-language explanation: {explanation}\n")
-        elif answer in ("r", "result"):
-            explanation = explain_result(paper["abstract"])
-            print("\n--- Key Result Explanation ---")
-            print(f"\n Key result: {explanation}\n")
 
         else: 
-            print(" Did'nt catch that - please enter 'y', 'n', 's', 'b', 'q', 'd', or 'r'.")
+            print(" Didn't catch that - please enter 'y', 'n', 's', 'b', 'q', 'd', or 'r'.")
 
 def run_labeling_session(papers: list[dict]) -> None:
     pre_existing = load_all_labels(LABELS_FILE)
