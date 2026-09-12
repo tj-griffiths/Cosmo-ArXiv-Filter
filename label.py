@@ -38,30 +38,46 @@ def explain_simply(abstract: str) -> str:
     from text_utils import clean_latex
     cleaned = clean_latex(abstract)
     prompt = (
-        "Explain the following physics research abstract to a curious "
-        "non-expert. In 3-5 simple sentences, cover: what problem or "
-        "question the researchers were addressing, what they actually "
-        "built or found, and why it matters.\n\n"
+        "Explain the following physics research abstract to a physics "
+        "master's student who is not a specialist in this particular "
+        "subfield. In AT MOST 3 short sentences, cover: what problem the "
+        "researchers addressed and what they found. Assume strong "
+        "general physics background — don't over-simplify — but briefly "
+        "define any subfield-specific jargon or notation if needed. Be "
+        "concise; do not pad or restate. Write it as flowing prose in "
+        "complete sentences — do not use bullet points, numbered lists, "
+        "or any list formatting. Write any numbers, equations, or "
+        "uncertainties in plain text or Unicode symbols (e.g. 41.8 ± 1.1) "
+        "— do not use LaTeX notation of any kind (no backslash commands, "
+        "no \\( \\) or $ delimiters, no _ or {} for subscripts).\n\n"
         f"Abstract: {cleaned}"
     )
-    return generate_with_api(prompt)
+    return clean_latex(generate_with_api(prompt))
 
 def explain_result(abstract: str) -> str:
     # Generates a plain-language explanation of the results using Groq API
     from text_utils import clean_latex
     cleaned = clean_latex(abstract)
     prompt = (
-        "Explain the key result of the following physics research abstract "
-        "to a curious non-expert. In 2-3 simple sentences, cover: what "
-        "specifically they found (not the background or method), and why "
-        "that result matters.\n\n"
+        "Read the following physics research abstract. In AT MOST 2 "
+        "short sentences, state specifically what the researchers found "
+        "or demonstrated — not the background, motivation, or method, "
+        "just the result — for a physics master's student who is not a "
+        "specialist in this subfield. Briefly define any jargon if "
+        "needed. Be concise; do not pad or restate. Write it as flowing "
+        "prose in complete sentences — do not use bullet points, "
+        "numbered lists, or any list formatting. Write any numbers, "
+        "equations, or uncertainties in plain text or Unicode symbols "
+        "(e.g. 41.8 ± 1.1) — do not use LaTeX notation of any kind (no "
+        "backslash commands, no \\( \\) or $ delimiters, no _ or {} for "
+        "subscripts).\n\n"
         f"Abstract: {cleaned}"
     )
-    return generate_with_api(prompt)
+    return clean_latex(generate_with_api(prompt))
 
 _LABEL_DESCRIPTIONS = {"1": "relevant", "0": "not relevant"}
 
-def prompt_for_label(paper: dict, current_label: str | None) -> str | None:
+def prompt_for_label(paper: dict, current_label: str | None, score: float | None = None) -> str | None:
     """
     
     Shows one paper and asks for a relevance judgement.
@@ -78,6 +94,8 @@ def prompt_for_label(paper: dict, current_label: str | None) -> str | None:
         print("\n" + "="*70)
         print(f"Title:    {paper['title']}")
         print(f"Category: {paper.get('category', paper.get('categories', 'unknown'))}")
+        if score is not None:
+            print(f"Score:   {score:.2f} (model's predicted relevance)")
         print(f"Summary:  {paper['short_description']}")
         print(f"Link:     {paper['link']}")
         if current_label is not None:
@@ -109,7 +127,7 @@ def prompt_for_label(paper: dict, current_label: str | None) -> str | None:
         else: 
             print(" Didn't catch that - please enter 'y', 'n', 's', 'b', 'q', 'd', or 'r'.")
 
-def run_labeling_session(papers: list[dict]) -> None:
+def run_labeling_session(papers: list[dict], scores_by_id: dict[str, float] | None = None) -> None:
     pre_existing = load_all_labels(LABELS_FILE)
     pre_existing_ids = {r["arxiv_id"]: r for r in pre_existing}
 
@@ -130,6 +148,7 @@ def run_labeling_session(papers: list[dict]) -> None:
         paper = unlabeled[i]
         existing = session_decision.get(paper["arxiv_id"])
         current_label = existing["label"] if existing else None
+        score = scores_by_id.get(paper["arxiv_id"]) if scores_by_id else None
         answer = prompt_for_label(paper, current_label)
 
         if answer is None: #quit
@@ -161,11 +180,33 @@ def run_labeling_session(papers: list[dict]) -> None:
     session_positive = sum(1 for d in session_decision.values() if d["label"] == "1")
     print(f"\nSession complete: {session_count} papers labeled, {session_positive} positive.")
 
+def interleave_by_category(papers: list[dict]) -> list[dict]:
+    # Papers get ordered randomly 
+    import random
+    from collections import defaultdict, deque
+
+    by_category: dict[str, deque[dict]] = defaultdict(deque)
+    for paper in papers:
+        primary_category = paper.get("categories", "unknown").split(",")[0].strip()
+        by_category[primary_category].append(paper)
+
+    queues = list(by_category.values())
+    random.shuffle(queues)
+
+    interleaved = []
+    while any(queues):
+        for q in list(queues):  # Iterate over a copy since we may modify queues
+            if q:
+                interleaved.append(q.popleft())
+            else:
+                queues.remove(q)  # Remove empty queues
+    return interleaved
 
 # Entry
 
 if __name__ == "__main__":
     papers = load_papers(INPUT_FILE)
+    papers = interleave_by_category(papers)
     run_labeling_session(papers)
 
     # Report overall progress across all sessions:

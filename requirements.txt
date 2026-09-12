@@ -3,3 +3,5 @@ requests
 transformers
 torch
 scikit-learn
+textual
+pyfiglet

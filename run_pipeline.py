@@ -15,8 +15,8 @@ PIPELINE = [
     ("embed", "embed.py"),
     ("label", "label.py"),
     # when done manually labeling, add:
-    #("classify", "classify.py")
-    #("email", "email.py") 
+    ('classify', 'classify.py'),
+    #("review", "review.py"),
 ]
 
 def run_stage(name: str, script: str) -> None:

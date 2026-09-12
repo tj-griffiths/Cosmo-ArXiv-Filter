@@ -1,8 +1,23 @@
 import json
 import re
+import torch
 
+from tqdm.std import TqdmDefaultWriteLock
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from text_utils import clean_latex
+from transformers.utils import logging as hf_logging
+hf_logging.disable_progress_bar()
+
+import logging
+logging.getLogger("transformers").setLevel(logging.ERROR)
+logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+
+# Disable tqdm's multiprocessing lock to avoid hanging in some environments
+def _noop_create_mp_lock(cls):
+    if not hasattr(cls, "mp_lock"):
+        cls.mp_lock = None
+TqdmDefaultWriteLock.create_mp_lock = classmethod(_noop_create_mp_lock)
+
 """
 HOW THE TRANSFORMERS PIPELINE WORKS
     `pipeline("summarization", model=...)` bundles three things:
@@ -27,9 +42,18 @@ MODEL CHOICE: sshleifer/distilbart-cnn-6-6
     relying on an off-the-shelf news summarizer.
 """
 
-BATCH_SIZE =  8
+# MODEL_NAME = "google/pegasus-arxiv"
+# """
+# MODEL CHOICE: google/pegasus-arxiv
+#     Trained specifically on arXiv paper summarization, so it should
+#     handle scientific vocabulary and structure far better than a
+#     news-tuned model. Caveat: it was trained on full-paper-to-abstract
+#     summarization, not abstract-to-one-liner compression, so output
+#     length/shape may behave a bit differently than DistilBART.
+# """
+
 MAX_SUMMARY_TOKENS = 100
-MIN_SUMMARY_TOKENS = 20
+MIN_SUMMARY_TOKENS = 5
 MAX_INPUT_TOKENS = 1024
 
 # Load papers:
@@ -44,34 +68,76 @@ def clean_summary_text(text: str) -> str:
     text = re.sub(r"\s+([.,;:!?])", r"\1", text)
     text = " ".join(text.split())  # collapse whitespace
 
-    if text and text[-1] not in ".!?":
-        last_end = max(text.rfind("."), text.rfind("!"), text.rfind("?"))
-        if last_end != -1:
-            text = text[:last_end + 1]
-    
+    if text:
+        text = text[0].upper() + text[1:]  # capitalize first letter
+
+    if text and (text[-1] not in ".!?" or not _parens_balanced(text)):
+        candidate_positions = sorted(
+            (i for i, ch in enumerate(text) if ch in ".!?"
+        ), reverse = True)
+        for pos in candidate_positions:
+            candidate = text[:pos + 1]
+            if _parens_balanced(candidate):
+                text = candidate
+                break  
+        else:
+            if candidate_positions:
+                text = text[:candidate_positions[0] + 1]
     return text
+
+def _parens_balanced(s: str) -> bool:
+    # True if every ( [ { in s has a matching closer and none close early
+    depth = 0
+    for ch in s:
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+            if depth < 0:
+                return False
+    return depth == 0
+
+# Checks Device for optimal performance
+
+def get_device_and_batch_size() -> tuple[torch.device, int]:
+    # Check in order: 1. CUDA (Nvidia GPU), 2. MPS (Apple GPU), 3. CPU
+    # Adjusts Batch Size based on device memory (32 for CUDA, 16 for MPS, 8 for CPU)
+
+    if torch.cuda.is_available():
+        return torch.device("cuda"), 32
+    elif torch.backends.mps.is_available():
+        return torch.device("mps"), 16
+    else: 
+        return torch.device("cpu"), 8
 
 # Summarize abstracts in batches
 
-def summarize_all(papers: list[dict]) -> list[dict]:
+def summarize_all(papers: list[dict], progress_callback=None, should_continue=None) -> list[dict]:
+    device, batch_size = get_device_and_batch_size()
+    print(f" Using device: {device}, batch size: {batch_size}")
+
     print(f" Loading Model '{MODEL_NAME}' (first run downloads ~300MB)...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME)
+    model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME).to(device)
 
     abstracts = [p["abstract"] for p in papers]
     abstracts_clean = [clean_latex(a) for a in abstracts]
 
-    print(f" Summarizing {len(abstracts_clean)} abstracts in batches of {BATCH_SIZE}...")
+    print(f" Summarizing {len(abstracts_clean)} abstracts in batches of {batch_size}...")
     summaries = []
-    for start in range(0, len(abstracts_clean), BATCH_SIZE):
-        batch = abstracts_clean[start:start+BATCH_SIZE]
+    for start in range(0, len(abstracts_clean), batch_size):
+        if should_continue is not None and not should_continue():
+            print(" Cancelled - stopping before next batch.")
+            break
+
+        batch = abstracts_clean[start:start+batch_size]
         inputs = tokenizer(
             batch,
             return_tensors="pt",
             padding=True, # Shortens each batch
             truncation=True, # Truncate long abstracts to fit model input
             max_length=MAX_INPUT_TOKENS
-        )
+        ).to(device) # Move inputs to the same device as the model
 
         summary_ids = model.generate(
             **inputs,
@@ -84,14 +150,20 @@ def summarize_all(papers: list[dict]) -> list[dict]:
             )
         
         batch_summaries = tokenizer.batch_decode(summary_ids, skip_special_tokens=True)
+        batch_summaries = [s.replace("<n>", " ") for s in batch_summaries] # clean up any <n> tokens
         summaries.extend(batch_summaries)
 
-        print(f"  -> {min(start + BATCH_SIZE, len(abstracts_clean))}/{len(abstracts_clean)} abstracts summarized...")
+        done = min(start + batch_size, len(abstracts_clean))
+        print(f" Summarized {done}/{len(abstracts_clean)} abstracts...")
+        if progress_callback is not None:
+            progress_callback(done, len(abstracts_clean))
+
 
     for paper, summary in zip(papers, summaries):
         paper["short_description"] = clean_summary_text(summary.strip())
 
     return papers
+
 
 # Entry point
 

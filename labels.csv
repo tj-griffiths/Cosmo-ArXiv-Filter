@@ -1,55 +1,185 @@
 arxiv_id,title,link,label,labeled_at
-2608.27468v1,Multimessenger Constraints on the Central Engine in SN 2023ixf: Neutron Star or Black Hole?,https://arxiv.org/abs/2608.27468,1,2026-09-01T19:21:53.893733+00:00
-2608.27478v1,Quantum speed limit time of a uniformly accelerated Unruh-DeWitt detector,https://arxiv.org/abs/2608.27478,0,2026-09-01T19:22:20.061525+00:00
-2608.27498v1,Quantum Information at Infinity,https://arxiv.org/abs/2608.27498,1,2026-09-01T19:22:37.736509+00:00
-2608.27503v1,Quantized Low-Rank Quantum State Tomography: Hyperbolic Quantization and Riemannian Least-Squares Recovery,https://arxiv.org/abs/2608.27503,0,2026-09-01T19:23:07.180277+00:00
-2608.27543v1,Reverse Quantum Mechanics,https://arxiv.org/abs/2608.27543,1,2026-09-01T19:23:19.180543+00:00
-2608.27551v1,Detecting Axion-Like Particles With Coiled Optical Fibers I: Silica Fibers,https://arxiv.org/abs/2608.27551,1,2026-09-01T19:23:33.825624+00:00
-2608.27553v1,Imperfect axions with no domain wall problem,https://arxiv.org/abs/2608.27553,0,2026-09-01T19:24:07.092153+00:00
-2608.27555v1,"A first-principles binary neutron star merger model of GW170817, GRB170817A, and AT2017gfo",https://arxiv.org/abs/2608.27555,1,2026-09-01T19:24:24.199520+00:00
-2608.27557v1,Discovering Substellar Dark Matter Halos with Astrometric Weak Lensing of Multiply Imaged Quasars,https://arxiv.org/abs/2608.27557,1,2026-09-01T19:24:52.432062+00:00
-2608.27558v1,KOFFEE: Kaon Observables at Future Fermilab Experimental Extensions,https://arxiv.org/abs/2608.27558,1,2026-09-01T19:25:12.177903+00:00
-2608.27559v1,Next-to-Leading-Order Electroweak Corrections to Quantum Observables in Lepton-Lepton Collisions,https://arxiv.org/abs/2608.27559,1,2026-09-01T19:25:31.479917+00:00
-2608.27560v1,"Resolved Dust in $z\approx1$ Galaxies with JWST/MIRI MRS: Survey Description and First View on PAHs, Mid-IR Atomic Emission, and Warm H$_2$",https://arxiv.org/abs/2608.27560,1,2026-09-01T19:25:57.861967+00:00
-2608.27561v1,Pulling strings in real time: flux tube dynamics in (2+1)-d $\mathbb{Z}_2$-Higgs Gauge Theories,https://arxiv.org/abs/2608.27561,0,2026-09-01T19:26:15.236501+00:00
-2609.02922v1,The influence of standard relativistic effects on Gaia-like astrometric catalogs,https://arxiv.org/abs/2609.02922,1,2026-09-04T14:31:17.617529+00:00
-2609.04254v1,Fixed ADM reconstruction of extended uncertainty principle black holes,https://arxiv.org/abs/2609.04254,0,2026-09-07T15:38:21.511860+00:00
-2609.04293v1,"Design optimization, commissioning, and uncertainty analysis of the quadrupole resonator system at Jefferson Lab for SRF material characterization",https://arxiv.org/abs/2609.04293,0,2026-09-07T15:38:57.901615+00:00
-2609.04296v1,"Dark matter glueball candidate from a $G(2)$--$E_6$--$E_7$ exceptional grand unified theory: $G$-parity, spin, mass and stability",https://arxiv.org/abs/2609.04296,1,2026-09-07T15:40:35.911062+00:00
-2609.04305v1,TNFlow: Amortized Posterior Inference for Trans-Neptunian Object Surface Composition,https://arxiv.org/abs/2609.04305,0,2026-09-07T15:41:55.171518+00:00
-2609.04306v1,Hadronization effects and electroweak contributions in DIS one-jettiness,https://arxiv.org/abs/2609.04306,1,2026-09-07T15:44:38.640923+00:00
-2609.04307v1,Nebular Spectra of the Extremely Metal-Poor SN II 2023ufx Over a Year After Explosion: A Massive Progenitor and Unique Circumstellar Environment,https://arxiv.org/abs/2609.04307,1,2026-09-07T15:45:57.952681+00:00
-2609.04308v1,Supernova microlensing as a probe of ultracompact minihalos and primordial cosmology,https://arxiv.org/abs/2609.04308,1,2026-09-07T15:46:14.139214+00:00
-2609.04309v1,Strong-Drive Floquet Engineering of Interacting Qudits: From Finite-Duration Controls to Emergent Symmetry,https://arxiv.org/abs/2609.04309,1,2026-09-07T15:47:38.779165+00:00
-2609.04310v1,A Swift X-ray view of the SMS4 sample - III: Deeper insight into previously undetected sources,https://arxiv.org/abs/2609.04310,0,2026-09-07T15:48:21.409949+00:00
-2609.04311v1,Development of quantum technologies for optical/infrared interferometry,https://arxiv.org/abs/2609.04311,1,2026-09-07T15:51:47.654033+00:00
-2609.04312v1,ALPACA I: Controlling source and PSF systematics in JWST time-delay cosmography with differentiable lens modeling,https://arxiv.org/abs/2609.04312,0,2026-09-07T17:40:10.110960+00:00
-2609.04313v1,It's All About the Environment: Local f_ NL from a Dark Matter Conditioned Multitracer Analysis,https://arxiv.org/abs/2609.04313,0,2026-09-08T19:06:36.087486+00:00
-2609.04315v1,JWST/NIRSpec Reveals Diverse Nuclear Environments in Dwarf Galaxies Hosting AGN,https://arxiv.org/abs/2609.04315,1,2026-09-08T19:07:00.055563+00:00
-2609.04316v1,A Kinematic Measurement of the Effective Viscosity of the Intracluster Medium: The Cold Front of A3667 Seen by XRISM,https://arxiv.org/abs/2609.04316,0,2026-09-08T19:07:09.989864+00:00
-2609.04317v1,Super-Eddington Accretion and Early-Stage Feedback in Ton S180,https://arxiv.org/abs/2609.04317,0,2026-09-08T19:21:55.880637+00:00
-2609.04320v1,Resolved Dust-Gas-Metallicity relations in nearby spiral galaxies,https://arxiv.org/abs/2609.04320,0,2026-09-08T19:22:06.391149+00:00
-2609.04321v1,"Reply to the Comment on ""The Axiom of Choice and the No-Signalling Principle""",https://arxiv.org/abs/2609.04321,0,2026-09-08T19:22:29.955146+00:00
-2609.04322v1,AGN-DB: A Unified Multi-Wavelength Database of Active Galactic Nuclei,https://arxiv.org/abs/2609.04322,0,2026-09-08T19:22:38.216054+00:00
-2609.04324v1,Recovering Ionizing Photon Escape and Galaxy Scaling Relations in the LzLCS via Si II and C II Absorption Lines and Mock Spectra from a Radiation-Hydrodynamic Simulation,https://arxiv.org/abs/2609.04324,0,2026-09-08T19:22:54.200093+00:00
-2609.04327v1,Widespread Inflows Reveal Baryonic Cycling in Star-forming and Quiescent Galaxies,https://arxiv.org/abs/2609.04327,0,2026-09-08T19:24:43.029947+00:00
-2609.04328v1,Emergent dark sector in group field theory cosmology,https://arxiv.org/abs/2609.04328,1,2026-09-08T19:25:47.057078+00:00
-2609.04332v1,Probing nuSMEFT at Belle II with displaced dilepton vertices,https://arxiv.org/abs/2609.04332,1,2026-09-08T19:26:05.545389+00:00
-2609.04333v1,Reinterpreting Supersymmetry,https://arxiv.org/abs/2609.04333,1,2026-09-08T19:26:22.659571+00:00
-2609.04334v1,Model Predictive Scoring Shows Specific BAO Observations (not SNIa) Drives w_0w_a Tension,https://arxiv.org/abs/2609.04334,0,2026-09-08T19:26:42.076424+00:00
-2609.04340v1,Waveform models for the gravitational-wave memory effect: III. Phenomenological frequency-domain model for nonspinning binaries,https://arxiv.org/abs/2609.04340,1,2026-09-08T19:27:03.873655+00:00
-2609.04349v1,"H I Absorbers as Beacons of Hidden Structure at z ~ 3: Multi-Component, Metal-Rich Absorption System near a Protocluster",https://arxiv.org/abs/2609.04349,1,2026-09-08T19:27:19.221009+00:00
-2609.04351v1,Extending the Stellar-to-Halo Mass Relation to Dwarf Galaxies with DESI DR1,https://arxiv.org/abs/2609.04351,1,2026-09-08T19:30:07.965349+00:00
-2609.05469v1,Lee-Yang zeros of modulated XY spin chains with Dzyaloshinskii-Moriya interaction: zero-contour topology and quantum phase-diagram reconstruction,https://arxiv.org/abs/2609.05469,1,2026-09-09T20:40:17.178753+00:00
-2609.05470v1,Quantum phase transitions and quantum-information characterization of a non-Hermitian XY chain with staggered Dzyaloshinskii--Moriya interactions,https://arxiv.org/abs/2609.05470,1,2026-09-09T20:40:31.243408+00:00
-2609.05471v1,Atmospheric Turbulence-Aware Optimization of Generalized Kennedy Receivers for Coherent-State BPSK Quantum Communication,https://arxiv.org/abs/2609.05471,0,2026-09-09T20:40:53.732301+00:00
-2609.05472v1,Quantum information spreading via higher-order operator correlators,https://arxiv.org/abs/2609.05472,1,2026-09-09T20:41:39.801349+00:00
-2609.05478v1,Can a Local Quantum-Mechanical Description of Physical Reality Be Considered Complete?,https://arxiv.org/abs/2609.05478,1,2026-09-09T20:41:59.103184+00:00
-2609.05528v1,Photon-Ring Retarded- Time Tomography: The Mahakal Phenomenon,https://arxiv.org/abs/2609.05528,1,2026-09-09T20:42:46.326121+00:00
-2609.05534v1,"Coherent multipath wave response on Reissner-Nordstr\""{o}m analogue surface",https://arxiv.org/abs/2609.05534,0,2026-09-09T20:44:43.400470+00:00
-2609.05548v1,A Spatio-Temporal Self-Propagating Log-Gaussian Cox-Hawkes Process for Star Formation Modelling,https://arxiv.org/abs/2609.05548,0,2026-09-09T20:45:17.135907+00:00
-2609.05554v1,Quantum-gravity-inspired Alcubierre warp-drive geometries,https://arxiv.org/abs/2609.05554,0,2026-09-09T20:46:37.851588+00:00
-2609.05555v1,The I3322 quantum value is attained spatially but not in finite dimension,https://arxiv.org/abs/2609.05555,1,2026-09-09T20:47:52.175909+00:00
-2609.05558v1,The Einstein Tensor from UV-regulated Field Correlations,https://arxiv.org/abs/2609.05558,1,2026-09-09T20:48:50.007547+00:00
-2609.05595v1,End state of the experimental black-hole bomb,https://arxiv.org/abs/2609.05595,0,2026-09-09T20:49:10.721728+00:00
-2609.05597v1,Exploring the dark sector through galaxy dynamics in clusters,https://arxiv.org/abs/2609.05597,1,2026-09-09T20:51:30.664295+00:00
+2609.10048v1,Search for neutrinoless quadruple beta decay of^136Xe in PandaX-4T detector,https://arxiv.org/abs/2609.10048,0,2026-09-10T19:00:45.147786+00:00
+2609.09461v1,Earth-Projected Clustering of Historical Optical Transients in the Palomar Observatory Sky Survey-I (POSS-I),https://arxiv.org/abs/2609.09461,1,2026-09-10T19:01:21.636703+00:00
+2310.03504v4,Interplay of space charge and intrabeam scattering in the LHC ion injector chain,https://arxiv.org/abs/2310.03504,0,2026-09-10T19:02:35.728382+00:00
+2609.10256v1,Integrated Population Balance and Multiphysics Modeling for Predicting Undesired Agglomeration in Small Molecule Manufacturing,https://arxiv.org/abs/2609.10256,0,2026-09-10T19:11:42.058613+00:00
+2508.20292v2,Interfacing Rydberg atoms with a chip-based superconducting microwave resonator using an ac-Stark-shifted single-photon transition,https://arxiv.org/abs/2508.20292,1,2026-09-10T19:12:41.338948+00:00
+2609.09228v1,Revisiting the Aerts-Broekaert-Smets quantum model of the liar paradox,https://arxiv.org/abs/2609.09228,0,2026-09-10T19:13:09.129838+00:00
+2609.09162v1,Physics-informed neural networks by Gradient-Guided Gaussian Adaptive Sampling (3GAS-PINNs),https://arxiv.org/abs/2609.09162,1,2026-09-10T19:14:02.233309+00:00
+2609.09223v1,Hamiltonian fingerprints of a collective mode across the BCS-BEC crossover,https://arxiv.org/abs/2609.09223,0,2026-09-10T19:19:35.433247+00:00
+2609.09226v1,Adaptive Entangled Game Modules in Artificial General Intelligence,https://arxiv.org/abs/2609.09226,0,2026-09-10T20:11:57.515847+00:00
+2609.09843v1,Operation of a negative ion gas time projection chamber without electronegative fill gases,https://arxiv.org/abs/2609.09843,1,2026-09-10T20:12:27.142902+00:00
+2609.09927v1,Is Black Hole Evaporation Prediction Friendly?,https://arxiv.org/abs/2609.09927,0,2026-09-10T20:12:54.248848+00:00
+2609.10341v1,Surrogate-accelerated parameterisation of physics-based Li-ion battery models,https://arxiv.org/abs/2609.10341,0,2026-09-10T20:13:08.407150+00:00
+2609.09773v1,Nonlinear flame describing function and mean shift kinematics of slit flames under combined axial-transverse forcing,https://arxiv.org/abs/2609.09773,0,2026-09-10T20:13:35.467910+00:00
+2609.09530v1,MUSES workflows for pQCD constraints on dense matter with finite quark masses,https://arxiv.org/abs/2609.09530,1,2026-09-10T20:13:52.417940+00:00
+2609.09280v1,Multipole splats for optimized and inverted effective potentials,https://arxiv.org/abs/2609.09280,0,2026-09-10T20:14:21.916204+00:00
+2609.09181v1,Spacetime closedness theorem for homogeneous Lorentzian foliations,https://arxiv.org/abs/2609.09181,1,2026-09-10T20:15:07.091740+00:00
+2609.10424v1,Noncommutative sharp Hausdorff-Young inequality,https://arxiv.org/abs/2609.10424,0,2026-09-10T20:15:21.119709+00:00
+2609.09251v1,The energetics of force errors in machine-learned molecular dynamics,https://arxiv.org/abs/2609.09251,0,2026-09-10T20:15:29.518759+00:00
+2609.09275v1,"""Transforming"" LHCb: self-supervised maps of heavy-flavour decays",https://arxiv.org/abs/2609.09275,1,2026-09-10T20:15:43.030440+00:00
+2609.09174v1,Improving student understanding via interactive learning tutorial on quantum key distribution using entanglement,https://arxiv.org/abs/2609.09174,0,2026-09-10T20:15:48.994448+00:00
+2609.09227v1,Finite-energy Gottesman-Kitaev-Preskill state-enhanced optical interferometry,https://arxiv.org/abs/2609.09227,0,2026-09-10T20:16:25.158573+00:00
+2609.09463v1,Temperature-induced effective topology in many-body ultracold atomic quantum systems,https://arxiv.org/abs/2609.09463,1,2026-09-10T20:16:41.177906+00:00
+2609.09282v1,Bounds on scattering amplitudes of non-identical scalar particles in 4d,https://arxiv.org/abs/2609.09282,1,2026-09-10T20:16:54.813453+00:00
+2505.01719v3,Realization of all-to-all fermion propagator for the first principle high accuracy strong interaction prediction,https://arxiv.org/abs/2505.01719,1,2026-09-10T20:17:16.036729+00:00
+2609.09191v1,On scalar and electromagnetic perturbations of the root--Kerr object,https://arxiv.org/abs/2609.09191,1,2026-09-10T20:18:04.174106+00:00
+2609.10240v1,Order elevation of directly self-starting sub-step implicit integrators for transient dynamics,https://arxiv.org/abs/2609.10240,1,2026-09-10T20:18:30.410326+00:00
+2609.09253v1,Virgo Filaments VII: MeerKAT HI-imaging of the VirgoIII filament,https://arxiv.org/abs/2609.09253,0,2026-09-10T20:18:58.554369+00:00
+2609.09160v1,LBFAST: A Lightweight Moment-Represented Lattice Boltzmann Solver for Multi-GPU Architectures,https://arxiv.org/abs/2609.09160,1,2026-09-10T21:22:21.215236+00:00
+2609.09194v1,Feasibility of a collider-based detector search for upward-going fermions produced from gravitationally-bound dark matter within the Earth,https://arxiv.org/abs/2609.09194,1,2026-09-10T21:22:30.733242+00:00
+2405.00636v4,Robustness of shallow graph embedding methods for community detection,https://arxiv.org/abs/2405.00636,0,2026-09-10T21:22:41.855325+00:00
+2609.10076v1,Expanding RCWA capabilities with advanced S-matrix algorithms,https://arxiv.org/abs/2609.10076,0,2026-09-10T21:22:55.467111+00:00
+2609.09312v1,Non-Hermitian topology in driven-dissipative systems: correspondence with quantum correlations and a resource for entanglement,https://arxiv.org/abs/2609.09312,1,2026-09-10T21:23:27.829859+00:00
+2609.09258v1,Tensor Network Moral Graph Recovery of Discrete Probability Distributions,https://arxiv.org/abs/2609.09258,0,2026-09-10T21:23:39.606075+00:00
+2201.01096v2,Wavescan: Multiresolution Time-Frequency Transform of Gravitational-Wave Data,https://arxiv.org/abs/2201.01096,0,2026-09-10T21:24:11.775563+00:00
+2609.10418v1,Cascade models of anisotropic turbulence in magnetized plasma of solar wind,https://arxiv.org/abs/2609.10418,0,2026-09-10T21:24:36.862980+00:00
+2609.10289v1,On the Limits of Quantum Multiparty Simultaneous Communication,https://arxiv.org/abs/2609.10289,0,2026-09-10T21:26:38.162631+00:00
+2609.09248v1,Decoding the Imprints of Energy-Momentum Squared Gravity in Neutron Stars with Machine Learning Analysis,https://arxiv.org/abs/2609.09248,1,2026-09-10T21:26:55.629532+00:00
+0812.3911v3,"Sunsets, tall buildings and the Earth's radius",https://arxiv.org/abs/0812.3911,0,2026-09-10T21:27:07.764301+00:00
+2609.09317v1,Fermionic quantum cellular automata in 2d are trivial,https://arxiv.org/abs/2609.09317,0,2026-09-10T21:27:39.725248+00:00
+2609.09731v1,Conditions for Global Optimality in Quantum Arimoto-Blahut Algorithms,https://arxiv.org/abs/2609.09731,0,2026-09-10T21:28:19.471702+00:00
+2609.10165v1,"Stable, Compact, and Direct Ghost-Cell Reconstruction: A Non-Iterative Approach for Embedded-Boundary Methods",https://arxiv.org/abs/2609.10165,0,2026-09-10T21:28:30.635952+00:00
+2609.09329v1,"The future of high-resolution UV spectroscopy: Science with a UV \'Echelle spectrograph on the Habitable Worlds Observatory, or a dedicated mission",https://arxiv.org/abs/2609.09329,1,2026-09-10T21:29:03.376522+00:00
+2609.09618v1,Planetary Nebula Central Stars as Tracers of Planetary Nebula-Star Cluster Associations in the Galaxy,https://arxiv.org/abs/2609.09618,0,2026-09-10T21:29:17.491568+00:00
+2608.16171v1,Rare-event sampling for stochastic dynamics in network systems using cluster updates,https://arxiv.org/abs/2608.16171,0,2026-09-10T21:29:56.010891+00:00
+2609.09272v1,From quantum fluctuations to galaxy power spectrum multipoles,https://arxiv.org/abs/2609.09272,0,2026-09-10T21:30:17.028740+00:00
+2607.11761v2,Collisionless whistler heat-flux instability in ultra-high- β plasmas,https://arxiv.org/abs/2607.11761,0,2026-09-10T21:30:31.920137+00:00
+2501.10886v3,Linear scaling causal discovery from high-dimensional time series by dynamical community detection,https://arxiv.org/abs/2501.10886,0,2026-09-10T23:42:50.958024+00:00
+2609.09734v1,Automated Detection of Double-Lined Spectroscopic Binaries in High-Resolution Spectra and a Probabilistic Analysis of Stellar Multiplicity,https://arxiv.org/abs/2609.09734,1,2026-09-10T23:43:07.108021+00:00
+2609.09288v1,Cosmological Collider Signals From a Triangle Loop,https://arxiv.org/abs/2609.09288,0,2026-09-10T23:44:40.102672+00:00
+2609.09296v1,Distinguishability Transitions from Global Quantum Snapshots,https://arxiv.org/abs/2609.09296,0,2026-09-10T23:45:09.583570+00:00
+2608.14673v3,A Human Audit of OpenAIs AI-Generated Mathematical Proofs,https://arxiv.org/abs/2608.14673,1,2026-09-10T23:45:52.177554+00:00
+2609.10252v1,Surrogate-Assisted Inverse Design and Temperature-Dependent Electrothermal Analysis of an All-Oxide Narrowband Thermophotovoltaic Emitter,https://arxiv.org/abs/2609.10252,0,2026-09-10T23:46:12.813339+00:00
+2609.10259v1,Optimization and Underground Implementation of the KAPAE Phase II Detector for an Invisible New Particle Search in Positronium Decay,https://arxiv.org/abs/2609.10259,1,2026-09-10T23:46:31.995396+00:00
+2609.09364v1,Phase stability and mechanical response of Ag-interlayered Al/Cu resistance spot-welded joints,https://arxiv.org/abs/2609.09364,0,2026-09-10T23:46:47.122414+00:00
+2603.15038v2,A convolutional autoencoder and neural ODE surrogate modeling framework applied to transient counterflow flames,https://arxiv.org/abs/2603.15038,0,2026-09-10T23:46:59.646030+00:00
+2609.09192v1,"One Gravity, Many G's: Generalized Horizon Entropy and Gravitational Susceptibility",https://arxiv.org/abs/2609.09192,0,2026-09-10T23:47:34.822343+00:00
+2609.10342v1,Quench dynamics in nonreciprocal Aubry-Andr\'e-Harper model,https://arxiv.org/abs/2609.10342,0,2026-09-10T23:48:31.697413+00:00
+2609.09268v1,Reconstructing fluid velocity fields from sparse sensors using a variational quantum algorithm,https://arxiv.org/abs/2609.09268,1,2026-09-10T23:49:00.591568+00:00
+2609.10505v1,Quantum Feature Engineering for Credit Default Prediction: When and Why IQP Circuits Help Linear Classifiers,https://arxiv.org/abs/2609.10505,0,2026-09-10T23:49:32.466309+00:00
+2609.09464v1,Prethermal ripplons in quenched binary Bose-Einstein condensates,https://arxiv.org/abs/2609.09464,0,2026-09-10T23:49:48.536816+00:00
+2609.10172v1,BRST quantization for the restoration of broken symmetries: a pedagogical example,https://arxiv.org/abs/2609.10172,0,2026-09-10T23:50:06.941811+00:00
+2609.09481v1,Detecting White Dwarf Exoplanets in the Roman Era,https://arxiv.org/abs/2609.09481,1,2026-09-10T23:50:20.172776+00:00
+2606.27463v2,Nonlinear Freezing of Vibrational Polariton Transport via Mesoscale Simulations,https://arxiv.org/abs/2606.27463,0,2026-09-10T23:51:02.467719+00:00
+2603.05859v4,Optical pumping of alkali-metal vapor in the quasi-high-pressure regime,https://arxiv.org/abs/2603.05859,0,2026-09-10T23:51:31.986202+00:00
+2609.09416v1,Area-constrained Willmore surfaces in Lorentzian manifolds: curvature inequalities and the Hawking quasi-local energy,https://arxiv.org/abs/2609.09416,0,2026-09-10T23:51:44.753488+00:00
+2609.09265v1,A Spectral Framework for Testing the Quasi-Star Hypothesis in Little Red Dots I: Weighing LRDs by Their Super-Eddington Luminosity Ratios---No Signs of Overmassive Black Holes,https://arxiv.org/abs/2609.09265,0,2026-09-11T00:29:50.027484+00:00
+2609.10006v1,Signature of Short-Range Order in Static Response of the Three-Dimensional Electron Gas,https://arxiv.org/abs/2609.10006,0,2026-09-11T00:48:42.670689+00:00
+2609.09199v1,The Masses of Bosons and Usual Fermions on Supersymmetric SU(3)_C × SU(4)_L × U(1)_X Model,https://arxiv.org/abs/2609.09199,1,2026-09-11T00:49:03.092459+00:00
+2609.10476v1,Invariant domain preservation for hybrid point-value and cell-average discretizations of hyperbolic equations on general meshes,https://arxiv.org/abs/2609.10476,0,2026-09-11T01:14:23.243261+00:00
+2608.21405v2,Does DESI Provide Evidence for Dynamical Dark Energy?,https://arxiv.org/abs/2608.21405,1,2026-09-11T01:14:45.284666+00:00
+2609.09717v1,Extended High-Mass Axion Search with an Auxetically Tuned Higher-Order-Mode Cavity,https://arxiv.org/abs/2609.09717,0,2026-09-11T01:15:06.208239+00:00
+2609.09996v1,SIM-GRAPH: A universal guide to symmetric interactions,https://arxiv.org/abs/2609.09996,1,2026-09-11T01:15:21.976365+00:00
+2609.09631v1,A pilot study on the CSST astrometric capability: Detecting astrometric binaries with Gaia synergy via simulated data,https://arxiv.org/abs/2609.09631,1,2026-09-11T01:15:37.101183+00:00
+2606.02285v2,Centrality dependence of charged-hadron pseudorapidity distributions in oxygen-oxygen collisions at s_NN = 5.36 TeV,https://arxiv.org/abs/2606.02285,0,2026-09-11T01:16:04.502582+00:00
+2609.09307v1,JZ-FMM: GPU-native differentiable N-body simulations with the Fast Multipole Method,https://arxiv.org/abs/2609.09307,0,2026-09-11T01:16:44.489694+00:00
+2609.09285v1,Dispersion Measure Variability in Fast Radio Bursts from Photoionization,https://arxiv.org/abs/2609.09285,0,2026-09-11T01:16:58.446492+00:00
+2601.18746v2,Coherent control of photon pairs via quantum interference between second- and third-order quantum nonlinear processes,https://arxiv.org/abs/2601.18746,1,2026-09-11T01:17:16.637595+00:00
+2609.10027v1,Entanglement Entropy of Interacting Scalar Theories on Fuzzy Spaces,https://arxiv.org/abs/2609.10027,0,2026-09-11T01:17:58.071228+00:00
+2609.09822v1,Validity of the CRD limit for modeling scattering polarization in the photospheric Sr I 4607 {} line,https://arxiv.org/abs/2609.09822,0,2026-09-11T01:18:09.691642+00:00
+2609.10288v1,Operation and performance of the Probe for Luminosity Measurement at LHCb,https://arxiv.org/abs/2609.10288,1,2026-09-11T01:18:41.833727+00:00
+2609.09202v1,On the analytic continuation and matching of threshold singularities from Vacuum Amplitudes,https://arxiv.org/abs/2609.09202,0,2026-09-11T01:19:28.646634+00:00
+2604.27982v4,Chiral Symmetry and Its Restoration in QCD,https://arxiv.org/abs/2604.27982,1,2026-09-11T01:19:45.419005+00:00
+2507.10005v3,Effects of relational graph modularity and depth on the learning performance of neural networks,https://arxiv.org/abs/2507.10005,0,2026-09-11T01:20:23.333835+00:00
+2609.10541v1,Symplectic Hopf Insulator: Delicate Topology in Bosonic Bogoliubov-de Gennes Systems,https://arxiv.org/abs/2609.10541,0,2026-09-11T01:20:38.239253+00:00
+2609.10062v1,Non-equilibrium dissipative stabilization of s- and d-wave superconductivity,https://arxiv.org/abs/2609.10062,0,2026-09-11T01:20:51.757176+00:00
+2609.09886v1,First Very Long Baseline Interferometry Fringe Detection at 690GHz,https://arxiv.org/abs/2609.09886,1,2026-09-11T01:21:02.471358+00:00
+2609.09340v1,A Finely-Binned Measurement of the Connected Even-Parity Galaxy 4-Point Correlation Function of DESI Year 1 Luminous Red Galaxies,https://arxiv.org/abs/2609.09340,0,2026-09-11T01:21:26.340779+00:00
+2609.09311v1,Free Neutron Decay in Kilonova Ejecta: X-ray/UV Flashes with Non-Thermal Effects,https://arxiv.org/abs/2609.09311,1,2026-09-11T01:21:44.105123+00:00
+2605.20501v3,Adaptive Multi-Fidelity Structural Optimization under Fluid-Structure Interaction,https://arxiv.org/abs/2605.20501,0,2026-09-11T01:22:12.932489+00:00
+2609.09266v1,SHELLQs. Black Hole Mass and Eddington Ratio Distributions of Intermediate-Luminosity Quasars at 6<z<7,https://arxiv.org/abs/2609.09266,1,2026-09-11T01:22:47.568882+00:00
+2609.09193v1,Evolving wormhole cosmology: modified Friedmann dynamics and observational constraints,https://arxiv.org/abs/2609.09193,1,2026-09-11T01:22:56.735506+00:00
+2609.09269v1,The Geometry of Transport in Quantum Walks and Parrondo's Paradox,https://arxiv.org/abs/2609.09269,0,2026-09-11T01:23:39.812008+00:00
+2609.10310v1,Constrained Optimization of Higher-Order Cluster-Expansion Hamiltonians for Alloys Using Simulated Bifurcation,https://arxiv.org/abs/2609.10310,0,2026-09-11T01:23:52.952650+00:00
+2609.09803v1,Hybrid Spin-Orbit Tomography for Earth-like Planets: Simultaneous Mapping of Static Surfaces and Dynamic Clouds from Multicolor Light Curves,https://arxiv.org/abs/2609.09803,0,2026-09-11T01:24:18.537198+00:00
+2609.09305v1,Transient and universal regimes in quantum reaction-transport kinetics,https://arxiv.org/abs/2609.09305,0,2026-09-11T01:59:06.394278+00:00
+2606.04910v2,Ollivier-Ricci curvature for causal sets,https://arxiv.org/abs/2606.04910,0,2026-09-11T01:59:21.740611+00:00
+2609.09733v1,Fractional Chern Insulators in Twisted Bilayer Optical Lattices,https://arxiv.org/abs/2609.09733,0,2026-09-11T01:59:32.195006+00:00
+2607.02806v2,Coupling loss and transmission in a multimode fiber-fed virtually imaged phased array (VIPA),https://arxiv.org/abs/2607.02806,0,2026-09-11T01:59:40.983092+00:00
+2609.10535v1,For Whom Does Bell Hold?,https://arxiv.org/abs/2609.10535,1,2026-09-11T01:59:48.958455+00:00
+2609.09933v1,Long-slit spectroscopy of the bipolar planetary nebula ESO 428-05,https://arxiv.org/abs/2609.09933,0,2026-09-11T02:00:16.873275+00:00
+2601.12569v2,The ν EYE Neutrino Telescope: Conceptual Design Report,https://arxiv.org/abs/2601.12569,1,2026-09-11T02:00:26.175005+00:00
+2609.09230v1,Nuclear interference versus dark sector excitation in the 248 keV LUX-ZEPLIN recoil candidate,https://arxiv.org/abs/2609.09230,1,2026-09-11T02:00:35.191184+00:00
+2606.10206v2,Charm quark production in heavy-ion collisions as a signature of pre-equilibrium,https://arxiv.org/abs/2606.10206,0,2026-09-11T02:01:28.724759+00:00
+2605.04164v2,Enabling Real-Time Training of a Wildfire-to-Smoke Map with Multilinear Operators,https://arxiv.org/abs/2605.04164,0,2026-09-11T02:02:01.690884+00:00
+2510.21963v4,Emergent spatiotemporal order and nonreciprocity in driven-dissipative nonlinear magnetic systems,https://arxiv.org/abs/2510.21963,0,2026-09-11T02:02:59.969796+00:00
+2609.10042v1,Modelling Fourier filtering wavefront sensors for PSD-based methods: the AOPERA tool,https://arxiv.org/abs/2609.10042,0,2026-09-11T02:03:11.804460+00:00
+2609.09504v1,Inductive Biases in Field-Level Cosmological Inference from Galaxy Catalogs,https://arxiv.org/abs/2609.09504,1,2026-09-11T02:04:04.426262+00:00
+2609.09314v1,Electromagnetic Emission and Orbital Evolution of Eccentric Supermassive Black Hole Binaries in Retrograde Disks,https://arxiv.org/abs/2609.09314,0,2026-09-11T02:04:22.756701+00:00
+2606.15495v3,SelfTICA: contrastive learning of dynamical representations for rare-event sampling and characterization,https://arxiv.org/abs/2606.15495,0,2026-09-11T02:04:31.008254+00:00
+2609.09267v1,RIGEL: Ultra-faint dwarf galaxy diversity shaped by inhomogeneous cosmic reionization,https://arxiv.org/abs/2609.09267,1,2026-09-11T02:04:44.916865+00:00
+2609.09196v1,Entropy Obstruction to Closed Semiclassical Bounces,https://arxiv.org/abs/2609.09196,0,2026-09-11T02:04:53.976574+00:00
+2609.09270v1,"Python in the front, party in the Backline: compiling quantum workloads across CPUs, GPUs, and FPGAs",https://arxiv.org/abs/2609.09270,1,2026-09-11T02:05:14.217716+00:00
+2604.07598v2,On the Information Content of Ariel Transmission Spectra: Reassessing the Tier System,https://arxiv.org/abs/2604.07598,0,2026-09-11T02:05:41.573969+00:00
+2606.21997v2,Failure of local equi-Lipschitzness for families of Lorentz distances to Cauchy surface foliations,https://arxiv.org/abs/2606.21997,0,2026-09-11T02:05:49.799204+00:00
+2609.10045v1,A machine-learned dynamical phase diagram of the one-dimensional nonlinear Schrödinger equation with quasiperiodic disorder and a static field,https://arxiv.org/abs/2609.10045,0,2026-09-11T02:05:59.307926+00:00
+2607.04682v2,All-optical control of coherent perfect absorption via frequency conversion,https://arxiv.org/abs/2607.04682,0,2026-09-11T02:06:14.213279+00:00
+2603.00321v5,Universal relations for two- and three-point functions of the CFT energy-momentum tensor and the Weyl anomaly,https://arxiv.org/abs/2603.00321,0,2026-09-11T02:06:24.383491+00:00
+2609.10360v1,On the 3D Magnetic Structure of Coronal Mass Ejections Through the Solar Corona,https://arxiv.org/abs/2609.10360,0,2026-09-11T02:06:42.660990+00:00
+2606.21658v2,Towards LLM-Powered Automation of a Dark Matter Constraint Repository,https://arxiv.org/abs/2606.21658,1,2026-09-11T02:06:57.859890+00:00
+2609.09262v1,Level-Four Modular Symmetry Selected by the Harmonic Pattern of Quark and Lepton Masses,https://arxiv.org/abs/2609.09262,0,2026-09-11T02:09:08.403604+00:00
+2511.01723v2,Spontaneous Raman Scattering under Vibrational Strong Coupling: The Critical Role of Polariton Spatial Mode Coherence,https://arxiv.org/abs/2511.01723,0,2026-09-11T02:09:22.226853+00:00
+2609.10109v1,Enabling New Discoveries with Machine Learning,https://arxiv.org/abs/2609.10109,1,2026-09-11T02:09:38.988188+00:00
+2609.09704v1,A universal connection between lens density profiles and low-frequency wave optics in gravitational-wave lensing,https://arxiv.org/abs/2609.09704,0,2026-09-11T02:23:15.635591+00:00
+2609.09322v1,cuDART: a GPU-accelerated ray tracing code for generating synthetic observations of relativistic astrophysical sources,https://arxiv.org/abs/2609.09322,1,2026-09-11T02:23:35.201591+00:00
+2609.09271v1,The Ashes of Supermassive Stars: Globular Cluster-like Aluminum Enhancement in Little Red Dots,https://arxiv.org/abs/2609.09271,1,2026-09-11T02:24:25.296586+00:00
+2609.09197v1,Constraints on Scalar--Tensor--Vector Gravity Theory Parameters Inferred from Quasiperiodic Oscillations,https://arxiv.org/abs/2609.09197,0,2026-09-11T02:24:48.207658+00:00
+2609.09276v1,Universal Entanglement Dynamics of Unitary Operators,https://arxiv.org/abs/2609.09276,0,2026-09-11T02:25:01.931543+00:00
+2608.20450v2,Leveraging Impact Parameter to Mitigate the Transit Light Source Effect: Early Insights from TRAPPIST-1,https://arxiv.org/abs/2608.20450,1,2026-09-11T02:25:31.942808+00:00
+2603.20763v4,Emergence of Unique Steady Edge States in Trapped Ultracold Atom Systems,https://arxiv.org/abs/2603.20763,1,2026-09-11T02:26:06.655810+00:00
+2603.12319v2,Quantum Signatures of Cosmic Topology: How Casimir Backreaction Transmits Isotropy Violation,https://arxiv.org/abs/2603.12319,0,2026-09-11T02:26:27.773135+00:00
+2609.10422v1,Wave Emission and Absorption in a Near-Sun Proton-Cyclotron Wave Storm,https://arxiv.org/abs/2609.10422,0,2026-09-11T02:26:35.457327+00:00
+2608.13429v2,MANGO: An Autodiff Neutrino Oscillation Engine for Differentiable Analysis Pipelines,https://arxiv.org/abs/2608.13429,0,2026-09-11T02:26:46.827878+00:00
+2609.09318v1,Nucleon Stron-Interactions Size From Charmonium Photoproduction,https://arxiv.org/abs/2609.09318,1,2026-09-11T02:27:05.436362+00:00
+2601.00402v2,Effect of electron-hole asymmetry on Δ_T noise in metal/quantum point contact/metal and metal/quantum point contact/superconductor junctions,https://arxiv.org/abs/2601.00402,0,2026-09-11T02:27:18.792183+00:00
+2609.10384v1,Wide Field Localization Using Fixed Modulation Collimators,https://arxiv.org/abs/2609.10384,0,2026-09-11T02:27:26.921513+00:00
+2609.09950v1,Learning cosmic web environments with diffusion models,https://arxiv.org/abs/2609.09950,1,2026-09-11T02:27:41.195297+00:00
+2609.09447v1,Evolution of Main Sequence Stars Transferring Mass to a Supermassive Black Hole,https://arxiv.org/abs/2609.09447,1,2026-09-11T02:28:09.750243+00:00
+2609.09274v1,Overmassive No More: The Case for Little Red Dots Hosting Black Hole Seeds as Massive as Single Supermassive Stars,https://arxiv.org/abs/2609.09274,1,2026-09-11T02:28:27.079093+00:00
+2609.09200v1,Initial conditions for inflation,https://arxiv.org/abs/2609.09200,0,2026-09-11T02:28:41.260783+00:00
+2609.09291v1,Spectral Core-Tail Architecture for Locally Certified Gibbs-State Preparation,https://arxiv.org/abs/2609.09291,0,2026-09-11T02:29:07.101456+00:00
+2609.06515v2,Superfluidity in active quantum flocks,https://arxiv.org/abs/2609.06515,1,2026-09-11T02:29:48.799782+00:00
+2609.10504v1,Can Elastic Neutrino Scattering Account for the LZ230616 Event?,https://arxiv.org/abs/2609.10504,1,2026-09-11T05:28:07.205994+00:00
+2609.09980v1,Fidelity-Aware Scheduling of Quantum Circuits on Multi-QPU Systems,https://arxiv.org/abs/2609.09980,1,2026-09-11T06:03:35.640577+00:00
+2609.09980v1,Fidelity-Aware Scheduling of Quantum Circuits on Multi-QPU Systems,https://arxiv.org/abs/2609.09980,1,2026-09-11T06:03:35.640577+00:00
+2609.07693v2,Improving constraints on the Yukawa correction at the Galactic Center with multiple stellar orbits,https://arxiv.org/abs/2609.07693,0,2026-09-11T06:04:12.927835+00:00
+2609.09980v1,Fidelity-Aware Scheduling of Quantum Circuits on Multi-QPU Systems,https://arxiv.org/abs/2609.09980,1,2026-09-11T06:03:35.640577+00:00
+2609.07693v2,Improving constraints on the Yukawa correction at the Galactic Center with multiple stellar orbits,https://arxiv.org/abs/2609.07693,0,2026-09-11T06:04:12.927835+00:00
+2607.26919v2,Quantum Fisher information of the Klein--Gordon and Dirac vacua,https://arxiv.org/abs/2607.26919,0,2026-09-11T06:04:42.420164+00:00
+2609.09980v1,Fidelity-Aware Scheduling of Quantum Circuits on Multi-QPU Systems,https://arxiv.org/abs/2609.09980,1,2026-09-11T06:03:35.640577+00:00
+2609.07693v2,Improving constraints on the Yukawa correction at the Galactic Center with multiple stellar orbits,https://arxiv.org/abs/2609.07693,0,2026-09-11T06:04:12.927835+00:00
+2607.26919v2,Quantum Fisher information of the Klein--Gordon and Dirac vacua,https://arxiv.org/abs/2607.26919,0,2026-09-11T06:04:42.420164+00:00
+2609.09779v1,Split-Step Dirac Cellular Automata for Continuous-Time Dirac Dynamics on Finite Spatial Lattices,https://arxiv.org/abs/2609.09779,1,2026-09-11T06:05:24.532278+00:00
+2609.09980v1,Fidelity-Aware Scheduling of Quantum Circuits on Multi-QPU Systems,https://arxiv.org/abs/2609.09980,1,2026-09-11T06:03:35.640577+00:00
+2609.07693v2,Improving constraints on the Yukawa correction at the Galactic Center with multiple stellar orbits,https://arxiv.org/abs/2609.07693,0,2026-09-11T06:04:12.927835+00:00
+2607.26919v2,Quantum Fisher information of the Klein--Gordon and Dirac vacua,https://arxiv.org/abs/2607.26919,0,2026-09-11T06:04:42.420164+00:00
+2609.09779v1,Split-Step Dirac Cellular Automata for Continuous-Time Dirac Dynamics on Finite Spatial Lattices,https://arxiv.org/abs/2609.09779,1,2026-09-11T06:05:24.532278+00:00
+2609.10521v1,Point particles in general relativity: beyond linear perturbation theory,https://arxiv.org/abs/2609.10521,1,2026-09-11T06:06:14.729184+00:00
+2609.11652v1,TDCOSMO XXXI: New techniques in line-of-sight studies of time delay lenses,https://arxiv.org/abs/2609.11652,0,2026-09-11T18:34:04.636202+00:00
+2609.11652v1,TDCOSMO XXXI: New techniques in line-of-sight studies of time delay lenses,https://arxiv.org/abs/2609.11652,0,2026-09-11T18:34:04.636202+00:00
+2609.11830v1,Oracle Separations in the Fourier Hierarchy,https://arxiv.org/abs/2609.11830,1,2026-09-11T18:35:07.105202+00:00
+2609.11652v1,TDCOSMO XXXI: New techniques in line-of-sight studies of time delay lenses,https://arxiv.org/abs/2609.11652,0,2026-09-11T18:34:04.636202+00:00
+2609.11830v1,Oracle Separations in the Fourier Hierarchy,https://arxiv.org/abs/2609.11830,1,2026-09-11T18:35:07.105202+00:00
+2609.11151v1,Qubit-Qutrit Quantum Tomography of hadronic Λ φ and Λ K^0 systems,https://arxiv.org/abs/2609.11151,1,2026-09-11T18:35:39.284807+00:00
+2609.11652v1,TDCOSMO XXXI: New techniques in line-of-sight studies of time delay lenses,https://arxiv.org/abs/2609.11652,0,2026-09-11T18:34:04.636202+00:00
+2609.11830v1,Oracle Separations in the Fourier Hierarchy,https://arxiv.org/abs/2609.11830,1,2026-09-11T18:35:07.105202+00:00
+2609.11151v1,Qubit-Qutrit Quantum Tomography of hadronic Λ φ and Λ K^0 systems,https://arxiv.org/abs/2609.11151,1,2026-09-11T18:35:39.284807+00:00
+2609.10697v1,Differential and Common Decoherence Modes in Witnessing the Quantum Gravity-Induced Entanglement of Matter,https://arxiv.org/abs/2609.10697,1,2026-09-11T18:35:54.742089+00:00
+2609.11652v1,TDCOSMO XXXI: New techniques in line-of-sight studies of time delay lenses,https://arxiv.org/abs/2609.11652,0,2026-09-11T18:34:04.636202+00:00
+2609.11830v1,Oracle Separations in the Fourier Hierarchy,https://arxiv.org/abs/2609.11830,1,2026-09-11T18:35:07.105202+00:00
+2609.11151v1,Qubit-Qutrit Quantum Tomography of hadronic Λ φ and Λ K^0 systems,https://arxiv.org/abs/2609.11151,1,2026-09-11T18:35:39.284807+00:00
+2609.10697v1,Differential and Common Decoherence Modes in Witnessing the Quantum Gravity-Induced Entanglement of Matter,https://arxiv.org/abs/2609.10697,1,2026-09-11T18:35:54.742089+00:00
+2609.11056v1,(Re)constructing Accurate Axion Oscillations,https://arxiv.org/abs/2609.11056,1,2026-09-11T18:36:40.513765+00:00
+2302.00821v4,Designing a Hybrid Digital / Analog Quantum Physics Emulator as Open Hardware,https://arxiv.org/abs/2302.00821,1,2026-09-11T19:03:25.370309+00:00
+2302.00821v4,Designing a Hybrid Digital / Analog Quantum Physics Emulator as Open Hardware,https://arxiv.org/abs/2302.00821,1,2026-09-11T19:03:25.370309+00:00
+2302.00821v4,Designing a Hybrid Digital / Analog Quantum Physics Emulator as Open Hardware,https://arxiv.org/abs/2302.00821,1,2026-09-11T19:03:25.370309+00:00
+2609.10663v1,Small-Body Science with the Nautilus Space Observatory: From Cislunar Space Resilience to Mapping the Kuiper-Belt-to-Oort-Cloud Transition,https://arxiv.org/abs/2609.10663,1,2026-09-11T19:16:45.527677+00:00
+2609.10663v1,Small-Body Science with the Nautilus Space Observatory: From Cislunar Space Resilience to Mapping the Kuiper-Belt-to-Oort-Cloud Transition,https://arxiv.org/abs/2609.10663,1,2026-09-11T19:16:45.527677+00:00
+2609.10663v1,Small-Body Science with the Nautilus Space Observatory: From Cislunar Space Resilience to Mapping the Kuiper-Belt-to-Oort-Cloud Transition,https://arxiv.org/abs/2609.10663,1,2026-09-11T19:16:45.527677+00:00
+2609.11847v1,The cost of simulating classically tractable quantum circuits and dynamics,https://arxiv.org/abs/2609.11847,1,2026-09-11T19:18:23.875403+00:00
+2609.11847v1,The cost of simulating classically tractable quantum circuits and dynamics,https://arxiv.org/abs/2609.11847,1,2026-09-11T19:18:23.875403+00:00
+2609.11847v1,The cost of simulating classically tractable quantum circuits and dynamics,https://arxiv.org/abs/2609.11847,1,2026-09-11T19:18:23.875403+00:00
+2503.05344v4,Implementation and verification of coherent error suppression using randomized compiling for Grover's algorithm on a trapped-ion device,https://arxiv.org/abs/2503.05344,1,2026-09-11T19:18:37.407496+00:00
+2503.05344v4,Implementation and verification of coherent error suppression using randomized compiling for Grover's algorithm on a trapped-ion device,https://arxiv.org/abs/2503.05344,1,2026-09-11T19:18:37.407496+00:00
+2503.05344v4,Implementation and verification of coherent error suppression using randomized compiling for Grover's algorithm on a trapped-ion device,https://arxiv.org/abs/2503.05344,1,2026-09-11T19:18:37.407496+00:00

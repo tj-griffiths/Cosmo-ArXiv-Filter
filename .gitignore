@@ -1,5 +1,6 @@
 # API Keys
 groq_api_key.txt
+gmail_credentials.txt
 
 # Python
 __pycache__/
@@ -14,3 +15,4 @@ papers_summarized.json
 embedding_ids.json
 *.npy
 classifier.pkl
+preferences.json

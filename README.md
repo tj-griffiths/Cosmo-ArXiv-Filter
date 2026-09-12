@@ -1,50 +1,70 @@
 # Cosmo
 
-A personal arXiv paper filter. Cosmo fetches new papers from a set of physics
-and quantum-information categories, summarizes and embeds them, and learns
-what I actually want to read — so eventually it can just email me the papers
-worth reading instead of me scrolling arXiv every day.
+![Cosmo](Images/title.png)
+
+A personal arXiv paper filter with a terminal UI. Cosmo fetches new papers
+across the full range of physics categories, summarizes and embeds them,
+learns my preferences and displays what I'd like to read from my own labels, and automatically emails me the top picks each day — so I don't have to scroll arXiv listings manually anymore.
 
 ## Why
 
 I have a physics background (ion traps, MR-TOF-MS instrumentation, ATLAS/Higgs
-detector work) and wanted something better than manually skimming arXiv listings
-across a dozen categories every day. Cosmo is both a practical daily tool to stay in touch with academia across multiple fields.
+detector work) and wanted something better than manually skimming arXiv
+listings across a dozen categories every day. Cosmo is both a practical daily
+tool to stay in touch with the field while also improving my ML skills with building an
+end-to-end applied pipeline (embeddings → classification → active learning
+→ automated delivery).
 
-## Categories tracked
+## The app
 
-`astro-ph.CO`, `astro-ph.GA`, `astro-ph.HE`, `astro-ph.IM`, `gr-qc`, `hep-ex`,
-`hep-ph`, `physics.acc-ph`, `physics.comp-ph`, `physics.data-an`,
-`physics.space-ph`, `quant-ph`
+Cosmo runs as a [Textual](https://github.com/Textualize/textual) TUI (`app.py`),
+styled with a Tokyo Night theme. Launch it with `python app.py` (or `cosmo`,
+if you've run `install.sh` — see Setup).
+
+| Screen | What it does |
+|---|---|
+| **Welcome** | ASCII "COSMO" banner + starfield. Smart-continues into fetching, labeling, or the choice menu depending on whether today's papers are ready and whether the labeling goal is met. |
+| **Categories** | Checkbox multi-select over every arXiv physics category, grouped into collapsible sections (astro-ph, cond-mat, nlin, physics, and other core categories like `hep-ph`/`quant-ph`/`gr-qc`). Selection is saved and reused automatically. |
+| **Fetch** | Runs fetch → summarize → embed as a background worker, with a log, progress bar with ETA, and Terraria-style flavor text while it works. |
+| **Label** | Interactive labeling loop (`y`/`n`/`s`/`b`, plus `d`/`r` for on-demand explanations, `o` to open the paper in your browser). Tracks progress toward a baseline goal of 50 "interesting" + 50 "not interesting" labels; switches from progress bars to plain running counts once that goal is met. |
+| **Choice menu** | Once the baseline goal is hit: **Cosmo Papers** (browse the classifier's top 10 picks), **Daily Labeling** (a quick 5-paper active-learning session), or **Indefinite Labeling** (keep going with no set goal). |
+| **Cosmo Papers** | Browse the classifier's top-scored unlabeled papers. `s` stars a paper — writing it to `labels.csv` as a *triple-weighted* positive label — `x` marks it not interesting. |
+| **Daily Labeling** | Uses uncertainty sampling to pick the 5 papers the classifier is least confident about — the highest-value 5 minutes of labeling you can do. Completing it shows a congratulations screen with streak tracking, current classifier accuracy, an "on this day in physics" fact, and a physics pun. |
+| **Settings** (`g` from anywhere) | Email opt-in, address, daily/weekly frequency (+ weekday), how many papers to send, and desktop notification toggle. |
+
+Every screen has a `h` help overlay listing its keybindings, and quitting is
+always safe — labels flush to disk immediately, so nothing is lost mid-session.
 
 ## Pipeline
 
 ```
-fetch → summarize → embed → label
+fetch → summarize → embed → classify → label / review → email
 ```
 
 | Stage | Script | What it does |
 |---|---|---|
-| Fetch | `fetch.py` | Pulls new papers from arXiv's daily RSS feed for each tracked category. |
-| Summarize | `summarize.py` | Generates a short plain-language summary of each abstract using a seq2seq model, with LaTeX cleanup so equations don't garble output. |
-| Embed | `embed.py` | Computes a SPECTER embedding (`sentence-transformers/allenai-specter`) for each paper's title + abstract, for similarity/classification use. |
-| Label | `label.py` | Interactive CLI for reviewing papers and marking them relevant / not relevant, building up a personal training set. |
+| Fetch | `fetch.py` | Pulls new papers from arXiv's daily RSS feed for whichever categories are selected; aware of weekends/holidays when arXiv doesn't post. |
+| Summarize | `summarize.py` | Plain-language abstract summaries via a local seq2seq model, with LaTeX cleanup so equations don't garble output. |
+| Embed | `embed.py` | SPECTER embeddings (`sentence-transformers/allenai-specter`) for every paper, incremental — only new papers get re-embedded. |
+| Classify | `classify.py` | Trains a logistic regression classifier on frozen embeddings against `labels.csv`; also scores unlabeled papers and picks out the ones the classifier is most uncertain about, for active-learning-style labeling. |
+| Label / Review | `label.py`, `review.py` | Interactive labeling (with on-demand explanations via `api.py`), and classifier-ranked review — this is what powers the Label, Cosmo Papers, and Daily Labeling screens. |
+| Email | `cosmo_email.py` | Trains the classifier, scores the day's fetch, and emails the top picks. Can run standalone (for scheduled/automated runs) or get triggered from within the app after a fetch completes. |
 
-**Planned next stages:** once enough labels exist, `classify.py` will train on
-`labels.csv` and score new papers automatically, and `send_email.py` will mail
-the top-N each day — replacing manual labeling with automated filtering.
+## Automated daily email
 
-## Running it
+`cosmo_email.py` is a standalone script (`run_daily_pipeline()`) that fetches,
+summarizes, embeds, and — if you've opted in via Settings — emails your top
+picks, all without opening the app. It:
 
-```bash
-python run_pipeline.py                  # run the full pipeline
-python run_pipeline.py --skip fetch     # reuse already-fetched data
-python run_pipeline.py --only embed     # run a single stage
-```
+- Skips days arXiv doesn't post (weekends/holidays)
+- Only runs once per day (tracked via `last_auto_run_date` in `preferences.json`)
+- Sends daily or on a chosen weekday, with a configurable number of papers per email (default 10)
+- Sends via Gmail SMTP using an app password (`gmail_credentials.txt`, gitignored)
+- Optionally fires a desktop notification (via `plyer`, if installed) when an email goes out
 
-`run_pipeline.py` runs each stage in order and stops if any stage fails. The
-stage list is a single list at the top of the file, so swapping `label.py` for
-`classify.py` + `send_email.py` later is a one-line edit.
+`app.py` auto-installs a background scheduled task for this on launch (via
+`scheduler_setup.py`), so once it's set up once, the daily email keeps running
+even when Cosmo isn't open.
 
 ## Setup
 
@@ -52,32 +72,49 @@ stage list is a single list at the top of the file, so swapping `label.py` for
 pip install -r requirements.txt
 ```
 
-Create a `user_config.txt` file (gitignored) containing your email, used to
-build a polite `User-Agent` string for arXiv API requests:
+- **`user_config.txt`** (gitignored) — your email, used to build a polite `User-Agent` string for arXiv requests.
+- **`gmail_credentials.txt`** (gitignored, 2 lines) — sender Gmail address, then a Gmail [app password](https://myaccount.google.com/apppasswords), for the daily email.
+- **Groq API key** (gitignored, file-based, no environment variables) — powers the on-demand "detail"/"key result" explanations in the labeling screens.
+- **`plyer`** (optional) — enables desktop notifications when the automated pipeline runs and sends an email.
+- Run `./install.sh` to set up the `cosmo` shell alias.
 
-```
-your_email@example.com
-```
+`preferences.json` is created and maintained automatically — it holds your
+selected categories, email settings, labeling streaks, and cached daily picks.
 
 ## Project structure
 
 ```
 Cosmo/
-├── fetch.py            # Stage 1: pull papers from arXiv
-├── summarize.py        # Stage 2: summarize abstracts
-├── embed.py            # Stage 3: compute SPECTER embeddings
-├── label.py            # Stage 4: manually label relevance
-├── run_pipeline.py      # Orchestrates all stages
+├── app.py               # Textual TUI — main entry point
+├── cosmo_email.py        # Standalone automated fetch + classify + email pipeline
+├── scheduler_setup.py    # Installs the background task that runs cosmo_email.py automatically
+├── fetch.py              # arXiv RSS ingestion
+├── summarize.py          # Abstract summarization
+├── embed.py              # SPECTER embeddings
+├── classify.py           # Classifier training, scoring, uncertainty sampling
+├── label.py              # Labeling logic + on-demand explanations
+├── review.py             # Classifier-ranked review logic
+├── api.py                # Groq API wrapper for explanations
+├── text_utils.py         # LaTeX/Unicode cleanup
+├── history.py            # "On this day in physics" facts
+├── run_pipeline.py       # CLI orchestrator (fetch → summarize → embed → label)
+├── install.sh            # Sets up the `cosmo` shell alias
 ├── requirements.txt
-└── user_config.txt      # gitignored — your email for the User-Agent header
+├── user_config.txt       # gitignored — email for arXiv User-Agent
+└── gmail_credentials.txt # gitignored — Gmail address + app password
 ```
 
-Generated data files (`papers_raw.json`, `papers_summarized.json`,
-`embedding_ids.json`) are gitignored since they're fully regenerable by
-rerunning the pipeline. `labels.csv` is tracked, since it's hand-labeled data
-that can't be regenerated.
+Regenerable artifacts (`papers_raw.json`, `papers_summarized.json`,
+`embedding_ids.json`, `*.npy`) are gitignored. `labels.csv` — hand-labeled,
+irreplaceable — is tracked.
 
 ## Status
 
-Actively in development. Fetch, summarize, embed, and label stages are working
-end to end. Next up: `classify.py` and automated email delivery.
+The full loop works end to end: fetch, summarize, embed, label (manually or
+via active learning), classify, and automated daily email delivery. Labeling
+happens through the TUI rather than a bare CLI now, with a baseline
+labeling goal, streaks, and a classifier-picks review screen.
+
+**Next up:** fine-tuning summarization quality on SciTLDR, author/lab
+filtering, and extending the on-demand explanation feature into a full
+chat-about-this-paper mode.
