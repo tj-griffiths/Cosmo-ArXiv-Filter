@@ -9,6 +9,11 @@ __pycache__/
 venv/
 user_config.txt
 
+# Test
+test_affiliation_coverage.py
+test_groq_key_findings.py
+test_pegasus_summary.py
+
 # Regenerable pipeline artifacts
 papers_raw.json
 papers_summarized.json
@@ -16,3 +21,5 @@ embedding_ids.json
 *.npy
 classifier.pkl
 preferences.json
+daily_run_error.log
+daily_run.log

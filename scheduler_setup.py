@@ -41,9 +41,34 @@ def ensure_scheduler_installed() -> None:
         pass 
 
 def _install_macos(cosmo_dir: str, email_script: str, hour: int, minute: int) -> None:
+    wrapper_path = os.path.join(cosmo_dir, "CosmoPapers")
+    wrapper_contents = f'#!/bin/bash\nexec "{sys.executable}" "{email_script}"\n'
+
+    existing = None
+    if os.path.exists(PLIST_PATH):
+        try:
+            with open(PLIST_PATH, "rb") as f:
+                existing = plistlib.load(f)
+        except Exception:
+            existing = None
+
+    needs_write = (
+        existing is None
+        or existing.get("StartCalendarInterval", {}).get("Hour") != hour
+        or existing.get("StartCalendarInterval", {}).get("Minute") != minute
+        or (existing.get("ProgramArguments") or [None])[0] != wrapper_path
+        or not os.path.exists(wrapper_path)
+    )
+    if not needs_write:
+        return
+
+    with open(wrapper_path, "w") as f:
+        f.write(wrapper_contents)
+    os.chmod(wrapper_path, 0o755)
+
     plist_data = {
         "Label": PLIST_LABEL,
-        "ProgramArguments": [sys.executable, email_script],
+        "ProgramArguments": [wrapper_path],
         "WorkingDirectory": cosmo_dir,
         "StartCalendarInterval": {"Hour": hour, "Minute": minute},
         "StandardOutPath": os.path.join(cosmo_dir, "daily_run.log"),
@@ -79,25 +104,3 @@ def _install_linux(email_script: str, hour: int, minute: int) -> None:
     updated = "\n".join(kept_lines + [new_line]) + "\n"
 
     subprocess.run(["crontab", "-"], input=updated, text=True, check=False)
-
-def _install_macos(cosmo_dir: str, email_script: str, hour: int, minute: int) -> None:
-    wrapper_path = os.path.join(cosmo_dir, "CosmoPapers")
-    wrapper_contents = f'#!/bin/bash\nexec "{sys.executable}" "{email_script}"\n'
-    with open(wrapper_path, "w") as f:
-        f.write(wrapper_contents)
-    os.chmod(wrapper_path, 0o755)
-
-    plist_data = {
-        "Label": PLIST_LABEL,
-        "ProgramArguments": [wrapper_path],
-        "WorkingDirectory": cosmo_dir,
-        "StartCalendarInterval": {"Hour": hour, "Minute": minute},
-        "StandardOutPath": os.path.join(cosmo_dir, "daily_run.log"),
-        "StandardErrorPath": os.path.join(cosmo_dir, "daily_run_error.log"),
-    }
-    os.makedirs(os.path.dirname(PLIST_PATH), exist_ok=True)
-    if os.path.exists(PLIST_PATH):
-        subprocess.run(["launchctl", "unload", PLIST_PATH], check=False, capture_output=True)
-    with open(PLIST_PATH, "wb") as f:
-        plistlib.dump(plist_data, f)
-    subprocess.run(["launchctl", "load", PLIST_PATH], check=False, capture_output=True)
