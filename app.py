@@ -3,6 +3,7 @@
 import json
 import os
 import random
+import re
 import numpy as np
 import webbrowser
 from datetime import datetime, timezone
@@ -486,6 +487,7 @@ class SettingsScreen(ModalScreen):
 
     #settings-box Input { border: round #3b4261; background: #16161e; color: #c0caf5; }
     #settings-box Input:focus { border: round #7dcfff; }
+    #email-error { color: #f7768e; text-style: bold; height: auto; margin-top: 0; }
     #email-note { color: #565f89; text-style: italic; text-align: center; margin-top: 1; }
     #settings-buttons { margin-top: 1; align: center middle; height: auto; }
     #settings-buttons Button { margin: 0 1; }
@@ -495,6 +497,8 @@ class SettingsScreen(ModalScreen):
     """
 
     WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
 
     def __init__(self) -> None:
         super().__init__()
@@ -512,6 +516,7 @@ class SettingsScreen(ModalScreen):
             yield Checkbox("Opt in to Email Address", value=self.initial_email_opt_in, id="email-opt-in-checkbox")
             yield Label("Email Address:")
             yield Input(value=self.initial_email, placeholder="you@example.com", id="email-input")
+            yield Static("", id="email-error")
 
             yield Label("Email frequency:")
             with RadioSet(id="frequency-radioset"):
@@ -555,6 +560,11 @@ class SettingsScreen(ModalScreen):
         email_opt_in = self.query_one("#email-opt-in-checkbox", Checkbox).value
         email = self.query_one("#email-input", Input).value.strip()
 
+        if email_opt_in and not self.EMAIL_PATTERN.match(email):
+            self.query_one("#email-error", Static).update("Invalid email address.")
+            return
+        self.query_one("#email-error", Static).update("")
+        
         freq_set = self.query_one("#frequency-radioset", RadioSet)
         frequency = "weekly" if freq_set.pressed_button and freq_set.pressed_button.id == "freq-weekly" else "daily"
 
@@ -581,6 +591,7 @@ class SettingsScreen(ModalScreen):
         prefs["desktop_notifications"] = notifications_on
         save_preferences(prefs)
 
+        self.app.clear_notifications()
         self.notify("Settings saved.", severity="information")
         self.app.pop_screen()
 
@@ -1407,6 +1418,7 @@ class DailyLabelScreen(Screen):
         ("s", "skip()", "Skip"),
         ("d", "detail()", "Detail"),
         ("r", "result()", "Result"),
+        ("b", "back()", "Back"),
         ("o", "open_link()", "Open Link"),
         Binding("escape", "back_to_choice", "Back to Menu", show=False),
         ("h", "help()", "Help"),
@@ -1433,6 +1445,7 @@ class DailyLabelScreen(Screen):
         self.session_decisions: dict[str, dict] = {}
         self.explanation_cache: dict[str, dict[str, str]] = {}
         self.labeled_count = get_daily_progress()
+        self.baseline_labels = load_all_labels(LABELS_FILE)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -1469,8 +1482,7 @@ class DailyLabelScreen(Screen):
         )
 
     def flush(self) -> None:
-        pre_existing = load_all_labels(LABELS_FILE)
-        write_labels(LABELS_FILE, pre_existing + list(self.session_decisions.values()))
+        write_labels(LABELS_FILE, self.baseline_labels + list(self.session_decisions.values()))
 
     def advance(self) -> None:
         self.index += 1
@@ -1502,6 +1514,7 @@ class DailyLabelScreen(Screen):
         if not self.papers or self.index >= len(self.papers):
             return
         paper = self.papers[self.index]
+        is_new = paper["arxiv_id"] not in self.session_decisions
         self.session_decisions[paper["arxiv_id"]] = {
             "arxiv_id": paper["arxiv_id"],
             "title": paper["title"],
@@ -1509,8 +1522,9 @@ class DailyLabelScreen(Screen):
             "label": label,
             "labeled_at": datetime.now(timezone.utc).isoformat()
         }
-        self.labeled_count += 1
-        set_daily_progress(self.labeled_count)
+        if is_new:
+            self.labeled_count += 1
+            set_daily_progress(self.labeled_count)
         self.flush()
         self.advance()
 
@@ -1557,6 +1571,13 @@ class DailyLabelScreen(Screen):
         if not self.papers or self.index >= len(self.papers):
             return
         webbrowser.open(self.papers[self.index]["link"])
+    
+    def action_back(self) -> None:
+        if self.index == 0:
+            self.notify("Already at first paper - can't go back.", severity = "warning")
+            return
+        self.index -= 1
+        self.render_paper()
 
     def action_back_to_choice(self) -> None:
         self.app.pop_screen()
@@ -1570,7 +1591,7 @@ class DailyLabelScreen(Screen):
             "currently least confident about, so labeling just a few of "
             "them gives outsized improvement for minimal effort. Completing "
             "all 5 shows a congratulations screen and updates your streak.",
-            [("y", "Interesting"), ("n", "Not interesting"), ("s", "Skip"), ("d", "Detail Explanation"), ("r", "Key Result Explanation"), ("o", "Open's Paper in Browser"), ("esc", "Back to Menu"), ("q", "Quit")]
+            [("y", "Interesting"), ("n", "Not interesting"), ("s", "Skip"), ("b", "Previous Paper"), ("d", "Detail Explanation"), ("r", "Key Result Explanation"), ("o", "Open's Paper in Browser"), ("esc", "Back to Menu"), ("q", "Quit")]
         ))
 
 class CosmoPaperScreen(Screen):
@@ -1804,9 +1825,9 @@ class CosmoApp(App):
     .toast--title { color: #7dcfff; text-style: bold; }
     Toast.-information { border: round #7dcfff; }
     Toast.-information .toast--title { color: #7dcfff; }
-    Toast.-warning { border-left: thick #e0af68; }
+    Toast.-warning { border: round #e0af68; }
     Toast.-warning .toast--title { color: #e0af68; }
-    Toast.-error { border-left: thick #f7768e; }
+    Toast.-error { border: round #f7768e; }
     Toast.-error .toast--title { color: #f7768e; }
     """
 
