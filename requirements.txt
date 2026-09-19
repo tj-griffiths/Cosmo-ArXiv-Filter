@@ -5,3 +5,7 @@ torch
 scikit-learn
 textual
 pyfiglet
+sentence-transformers
+holidays
+tqdm
+numpy

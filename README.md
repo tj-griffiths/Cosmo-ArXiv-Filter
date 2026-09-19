@@ -73,14 +73,22 @@ even when Cosmo isn't open.
 pip install -r requirements.txt
 ```
 
-- **`user_config.txt`** (gitignored) — your email, used to build a polite `User-Agent` string for arXiv requests.
-- **`gmail_credentials.txt`** (gitignored, 2 lines) — sender Gmail address, then a Gmail [app password](https://myaccount.google.com/apppasswords), for the daily email.
-- **Groq API key** (gitignored, file-based, no environment variables) — powers the on-demand "detail"/"key result" explanations in the labeling screens.
-- **`plyer`** (optional) — enables desktop notifications when the automated pipeline runs and sends an email.
+- **`user_config.txt`** (gitignored) — your email, used to build a polite `User-Agent` string for arXiv requests. One line: `your.email@example.com`
+- **`gmail_credentials.txt`** (gitignored) — sender Gmail address, then a Gmail [app password](https://myaccount.google.com/apppasswords), for the daily email:
+
+```
+  your.email@gmail.com
+  abcdabcdabcdabcd
+```
+
+  (the app password is the 16-character code Google generates, not your regular password — spaces shown on Google's site can be included or stripped, either works)
+- **`groq_api_key.txt`** (gitignored) — a free key from [console.groq.com/keys](https://console.groq.com/keys), powers the on-demand "detail"/"key result" explanations in the labeling screens. One line: `gsk_abcdefghijklmnopqrstuvwxyz1234567890ABCD`. A `GROQ_API_KEY` environment variable works too and takes priority if both are set. Optionally, `groq_model.txt` (or `GROQ_MODEL`) overrides the default model — e.g. `openai/gpt-oss-20b`.
+- **Desktop notifications (optional):** `pip install plyer` — no config file needed, it just works once installed. Skip it and notifications silently no-op.
 - Run `./install.sh` to set up the `cosmo` shell alias.
+- **macOS only — Full Disk Access:** if Cosmo lives inside `Documents`, `Desktop`, or `Downloads`, macOS blocks the background daily-email task from accessing that folder at all, and it'll fail silently with a `daily_run_error.log` full of `Operation not permitted` errors. Fix it once in System Settings → Privacy & Security → Full Disk Access: add `/bin/bash`, and add the exact Python path shown inside the `CosmoPapers` file in your Cosmo folder (`cat CosmoPapers` to see it). Cloning Cosmo somewhere outside those three folders (e.g. `~/Cosmo`) avoids this step entirely.
 
 `preferences.json` is created and maintained automatically — it holds your
-selected categories, email settings, labeling streaks, and cached daily picks.
+selected categories, preferred authors, email settings, labeling streaks, and cached daily picks.
 
 ## Project structure
 
