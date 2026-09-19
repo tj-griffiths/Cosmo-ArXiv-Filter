@@ -75,6 +75,31 @@ CATEGORY_GROUPS = {
     "quant-ph": "Quantum Physics",
 }
 
+# Setups author search by normalizing names to first initial + last name
+def _normalize_name(name: str) -> tuple[str, str] | None:
+    parts = [p for p in name.replace(".", " ").split() if p]
+    if len(parts) < 2:
+        return None
+    first_initial = parts[0][0].lower()
+    last_name = parts[-1].lower()
+    return first_initial, last_name
+
+# Checks if any of the authors of a paper match the preferred authors list
+def matches_preferred_author(paper: dict, preferred: list[str] | None = None) -> bool:
+    if preferred is None:
+        preferred = [a.strip() for a in load_preferences().get("preferred_authors", []) if a.strip()]
+    if not preferred:
+        return False
+    preferred_keys = {_normalize_name(name) for name in preferred}
+    preferred_keys.discard(None)
+    if not preferred_keys:
+        return False
+    for author in paper.get("authors", []):
+        key = _normalize_name(author)
+        if key is not None and key in preferred_keys:
+            return True
+    return False
+
 def should_send_today(prefs: dict) -> bool:
     frequency = prefs.get("email_frequency", "daily")
     if frequency == "daily":
@@ -133,13 +158,30 @@ def send_digest_email(recipient: str, papers: list[tuple[float, dict]]) -> bool:
         return False
     sender, app_password = creds
 
+    preferred_ids = preferred_ids or set()
+    preferred_papers = [(score, p) for score, p in papers if p["arxiv_id"] in preferred_ids]
+    other_papers = [(score, p) for score, p in papers if p["arxiv_id"] not in preferred_ids]
+
     by_category: dict[str, list[dict]] = defaultdict(list)
-    for score, paper in papers:
+    for score, paper in other_papers:
         primary_category = paper.get("categories", "unknown").split(",")[0].strip()
-        group_names = CATEGORY_GROUPS.get()
+        group_name = CATEGORY_GROUPS.get(primary_category, primary_category)
         by_category[group_name].append(paper)
 
     parts = [f"<p>Cosmo's top {len(papers)} picks for {date.today().isoformat()}:</p>"]
+
+    if preferred_papers:
+        parts.append('<h3 style="color:#b8860b;">&#9733; Preferred Authors</h3>')
+        for score, paper in preferred_papers:
+            title = html.escape(paper["title"])
+            summary = html.escape(paper["short_description"])
+            link = html.escape(paper["link"])
+            parts.append(
+                f'<p><b>Title:</b> <u>{title}</u><br>'
+                f'<b>Summary:</b> {summary}<br>'
+                f'<a href="{link}">{link}</a></p>'
+            )
+
     for group_name in sorted(by_category):
         parts.append(f"<h3>{html.escape(group_name)}</h3>")
         for paper in by_category[group_name]:
@@ -187,8 +229,15 @@ def maybe_send_daily_email(papers: list[dict]) -> None:
     labeled_ids = {row["arxiv_id"] for row in labels}
     scored_all = score_all_papers(clf, embeddings_by_id, papers)
     unlabeled_scored = [(score, p) for score, p in scored_all if p["arxiv_id"] not in labeled_ids]
+
+    preferred = [a.strip() for a in prefs.get("preferred_authors", []) if a.strip()]
+    guaranteed = [(score,p) for score, p in unlabeled_scored if matches_preferred_author(p, preferred)]
+    guaranteed_ids = {p["arxiv_id"] for _, p in guaranteed}
+    remaining = [(score, p) for score, p in unlabeled_scored if p["arxiv_id"] not in guaranteed_ids]
+
     email_count = prefs.get("email_paper_count", COSMO_PAPERS_COUNT)
-    top_papers = unlabeled_scored[:email_count]
+    remaining_slots = max(0, email_count - len(guaranteed))
+    top_papers = guaranteed + remaining[:remaining_slots]
 
     sent = send_digest_email(prefs["email"], top_papers)
     prefs["last_email_sent_date"] = date.today().isoformat()

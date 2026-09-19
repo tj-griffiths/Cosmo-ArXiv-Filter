@@ -23,6 +23,7 @@ from textual.binding import Binding
 from fetch import CATEGORIES, fetch_today, is_arxiv_closed_today
 from summarize import summarize_all
 from embed import embed_all, load_existing_embeddings, EMBEDDINGS_FILE, EMBEDDING_IDS_FILE
+from cosmo_email import matches_preferred_author
 from label import(
     interleave_by_category,
     load_all_labels,
@@ -676,6 +677,18 @@ class CategoryScreen(Screen):
 
     #continue-btn { margin: 1 2; background: #41a6b5; color: #1a1b26; border: none; }
     #continue-btn:focus { background: #7dcfff; color: #1a1b26; border: none; }
+    #author-title { padding: 1 2 0 2; text-style: bold; color: #7dcfff; }
+    #author-section { padding: 0 2; }
+    #author-input { border: round #3b4261; background: #16161e; color: #c0caf5; margin-bottom: 1; }
+    #author-input:focus { border: round #7dcfff; }
+    #add-author-row { align: center middle; height: auto; margin-bottom: 1; }
+    #add-author-btn { background: #41a6b5; color: #1a1b26; border: none; }
+    #add-author-btn:focus { background: #7dcfff; color: #1a1b26; }
+
+    .author-row { height: auto; align: left middle; margin-bottom: 1; padding: 0 1; border: round #7dcfff; }
+    .author-name { width: 1fr; color: #c0caf5; }
+    .remove-author-btn { min-width: 3; background: #414868; color: #c0caf5; border: none; }
+    .remove-author-btn:focus { background: #f7768e; color: #1a1b26; }
     """
 
 
@@ -690,6 +703,14 @@ class CategoryScreen(Screen):
                 with Collapsible(title = group_label, collapsed=True):
                     for code in codes:
                         yield Checkbox(CATEGORY_LABELS.get(code, code), value = (code in default_selected), id = _safe_id(code))
+        yield Static("Preferred authors (their papers will always be included):", id="author-title")
+        with Vertical(id="author-section"):
+            yield Input(placeholder="Author Name", id="author-input")
+            with Horizontal(id="add-author-row"):
+                yield Button("Add", id="add-author-btn")
+            with Vertical(id="author-list"):
+                for name in load_preferences().get("preferred_authors", []):
+                    yield self._build_author_row(name)
         yield Button("Continue", id="continue-btn", variant = "primary")
         yield Footer()
 
@@ -707,12 +728,56 @@ class CategoryScreen(Screen):
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "continue-btn":
             self.action_try_continue()
+        elif event.button.id == "add-author-btn":
+            self._add_author()
+        elif event.button.has_class("remove-author-btn"):
+            self._remove_author(event.button)
 
     def on_key(self, event) -> None:
         from textual.widgets._collapsible import CollapsibleTitle
         if event.key == "space" and isinstance(self.focused, CollapsibleTitle):
             event.stop()
             self.focused.action_toggle_collapsible()
+
+    def _build_author_row(self, name: str) -> Horizontal:
+        row = Horizontal(
+            Static(name, classes="author-name"),
+            Button("×", classes="remove-author-btn"),
+            classes="author-row",
+        )
+        row.author_name = name
+        return row
+    
+    def _add_author(self) -> None:
+        input_widget = self.query_one("#author-input", Input)
+        name = input_widget.value.strip()
+        if not name:
+            return
+        if len(name.split()) < 2:
+            self.notify("Enter at least first and last name (e.g. 'Boris Blinov')", severity="warning")
+            return
+        prefs = load_preferences()
+        preferred = prefs.get("preferred_authors", [])
+        if name in preferred:
+            input_widget.value = ""
+            return
+        preferred.append(name)
+        prefs["preferred_authors"] = preferred
+        save_preferences(prefs)
+        self.query_one("#author-list", Vertical).mount(self._build_author_row(name))
+        input_widget.value = ""
+
+    def _remove_author(self, button: Button) -> None:
+        row = button.parent
+        name = row.author_name
+        prefs = load_preferences()
+        prefs["preferred_authors"] = [a for a in prefs.get("preferred_authors", []) if a != name]
+        save_preferences(prefs)
+        row.remove()
+
+    def on_input_submitted(self, event: Input.Submitted) -> None:
+        if event.input.id == "author-input":
+            self._add_author()
 
     def action_help(self) -> None:
         self.app.push_screen(HelpModal(
@@ -721,8 +786,14 @@ class CategoryScreen(Screen):
             "cond-mat, nlin, physics, and other core categories). Expand a "
             "group to see and toggle its individual categories. Your "
             "selection is saved and reused automatically on future days "
-            "until you change it here again.",
-            [("space", "Toggle checkbox / expand group"), ("w/s or ↑/↓", "Move focus"), ("c", "Continue"), ("escape", "Back"), ("q", "Quit")]
+            "until you change it here again.\n\n"
+            "Below the categories, you can also list preferred authors — "
+            "type a full first and last name and press Enter or Add. Any "
+            "paper by a listed author is always included in your daily "
+            "email, regardless of classifier score. Matching is by first "
+            "initial + last name, so it isn't foolproof for very common "
+            "name combinations.",
+            [("space", "Toggle checkbox / expand group"), ("enter", "Add author (when typing)"), ("w/s or ↑/↓", "Move focus"), ("c", "Continue"), ("escape", "Back"), ("q", "Quit")]
         ))
     
     def action_quit(self) -> None:
@@ -1473,6 +1544,7 @@ class DailyLabelScreen(Screen):
         self.query_one("#daily-progress", ProgressBar).update(progress=self.labeled_count)
 
         paper = self.papers[self.index]
+        preferred_note = "  [#e0af68 bold]\u2605 Preferred Author[/#e0af68 bold]" if matches_preferred_author(paper) else ""
         self.query_one("#paper-title", Static).update(f"[#7dcfff]Title:[/#7dcfff] {escape_markup(paper['title'])}")
         self.query_one("#session-count", Static).update(f"({self.index + 1}/{len(self.papers)})")
         self.query_one("#paper-body", Static).update(

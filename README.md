@@ -24,7 +24,7 @@ if you've run `install.sh` — see Setup).
 | Screen | What it does |
 |---|---|
 | **Welcome** | ASCII "COSMO" banner + starfield. Smart-continues into fetching, labeling, or the choice menu depending on whether today's papers are ready and whether the labeling goal is met. |
-| **Categories** | Checkbox multi-select over every arXiv physics category, grouped into collapsible sections (astro-ph, cond-mat, nlin, physics, and other core categories like `hep-ph`/`quant-ph`/`gr-qc`). Selection is saved and reused automatically. |
+| **Categories** | Checkbox multi-select over every arXiv physics category, grouped into collapsible sections (astro-ph, cond-mat, nlin, physics, and other core categories like `hep-ph`/`quant-ph`/`gr-qc`). Selection is saved and reused automatically. You can also list preferred authors here — any paper by a listed author is always included in your daily email regardless of classifier score (matched by first initial + last name). |
 | **Fetch** | Runs fetch → summarize → embed as a background worker, with a log, progress bar with ETA, and Terraria-style flavor text while it works. |
 | **Label** | Interactive labeling loop (`y`/`n`/`s`/`b`, plus `d`/`r` for on-demand explanations, `o` to open the paper in your browser). Tracks progress toward a baseline goal of 50 "interesting" + 50 "not interesting" labels; switches from progress bars to plain running counts once that goal is met. |
 | **Choice menu** | Once the baseline goal is hit: **Cosmo Papers** (browse the classifier's top 10 picks), **Daily Labeling** (a quick 5-paper active-learning session), or **Indefinite Labeling** (keep going with no set goal). |
@@ -59,6 +59,7 @@ picks, all without opening the app. It:
 - Skips days arXiv doesn't post (weekends/holidays)
 - Only runs once per day (tracked via `last_auto_run_date` in `preferences.json`)
 - Sends daily or on a chosen weekday, with a configurable number of papers per email (default 10)
+- Always includes papers by any preferred author, in their own section at the top of the email, on top of the configured paper count
 - Sends via Gmail SMTP using an app password (`gmail_credentials.txt`, gitignored)
 - Optionally fires a desktop notification (via `plyer`, if installed) when an email goes out
 
@@ -114,7 +115,3 @@ The full loop works end to end: fetch, summarize, embed, label (manually or
 via active learning), classify, and automated daily email delivery. Labeling
 happens through the TUI rather than a bare CLI now, with a baseline
 labeling goal, streaks, and a classifier-picks review screen.
-
-**Next up:** fine-tuning summarization quality on SciTLDR, author/lab
-filtering, and extending the on-demand explanation feature into a full
-chat-about-this-paper mode.
