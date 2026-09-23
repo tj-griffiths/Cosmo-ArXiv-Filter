@@ -69,9 +69,24 @@ even when Cosmo isn't open.
 
 ## Setup
 
+**Quick install (macOS/Linux, or Windows via Git Bash/WSL):**
 ```bash
-pip install -r requirements.txt
+curl -L https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -o cosmo.zip && unzip cosmo.zip && rm cosmo.zip && cd Cosmo-ArXiv-Filter-main && pip install -r requirements.txt && chmod +x install.sh && ./install.sh
 ```
+
+**Windows (PowerShell), no Git Bash needed:**
+```powershell
+Invoke-WebRequest -Uri https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -OutFile cosmo.zip; Expand-Archive cosmo.zip -DestinationPath .; Remove-Item cosmo.zip; cd Cosmo-ArXiv-Filter-main; pip install -r requirements.txt; .\install.ps1
+```
+(`install.sh` sets up a shell alias, which PowerShell doesn't use the same way — run `python app.py` directly, or add your own PowerShell function/alias if you'd rather not.)
+
+**Using conda instead of pip:** after extracting (either command above, skipping the `pip install` step), run:
+```bash
+conda env create -f environment.yml
+conda activate cosmo
+```
+
+Either way, you'll still need the manual pieces below — they're personal credentials, not something an installer can fill in for you.
 
 - **`user_config.txt`** (gitignored) — your email, used to build a polite `User-Agent` string for arXiv requests. One line: `your.email@example.com`
 - **`gmail_credentials.txt`** (gitignored) — sender Gmail address, then a Gmail [app password](https://myaccount.google.com/apppasswords), for the daily email:
@@ -107,10 +122,13 @@ Cosmo/
 ├── text_utils.py         # LaTeX/Unicode cleanup
 ├── history.py            # "On this day in physics" facts
 ├── run_pipeline.py       # CLI orchestrator (fetch → summarize → embed → label)
-├── install.sh            # Sets up the `cosmo` shell alias
+├── install.sh            # Sets up the `cosmo` shell alias (macOS/Linux)
+├── install.ps1           # Sets up the `cosmo` command (Windows PowerShell)
 ├── requirements.txt
+├── environment.yml       # Conda environment spec, alternative to requirements.txt
 ├── user_config.txt       # gitignored — email for arXiv User-Agent
-└── gmail_credentials.txt # gitignored — Gmail address + app password
+├── gmail_credentials.txt # gitignored — Gmail address + app password
+└── groq_api_key.txt      # gitignored — Groq API key for on-demand explanations
 ```
 
 Regenerable artifacts (`papers_raw.json`, `papers_summarized.json`,

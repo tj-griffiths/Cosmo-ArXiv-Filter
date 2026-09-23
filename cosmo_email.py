@@ -151,7 +151,7 @@ def get_gmail_credentials() -> tuple[str, str] | None:
         return None
     return lines[0], lines[1]
 
-def send_digest_email(recipient: str, papers: list[tuple[float, dict]]) -> bool:
+def send_digest_email(recipient: str, papers: list[tuple[float, dict]], preferred_ids: set[str] | None = None) -> bool:
     creds = get_gmail_credentials()
     if creds is None:
         print("No gmail_credentials.txt found - skipping email.")
@@ -239,7 +239,7 @@ def maybe_send_daily_email(papers: list[dict]) -> None:
     remaining_slots = max(0, email_count - len(guaranteed))
     top_papers = guaranteed + remaining[:remaining_slots]
 
-    sent = send_digest_email(prefs["email"], top_papers)
+    sent = send_digest_email(prefs["email"], top_papers, preferred_ids=guaranteed_ids)
     prefs["last_email_sent_date"] = date.today().isoformat()
     save_preferences(prefs)
 

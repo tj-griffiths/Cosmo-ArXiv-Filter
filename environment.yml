@@ -1,0 +1,15 @@
+name: cosmo
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pytorch
+  - numpy
+  - scikit-learn
+  - requests
+  - tqdm
+  - feedparser
+  - textual
+  - pyfiglet
+  - holidays
+  - sentence-transformers
