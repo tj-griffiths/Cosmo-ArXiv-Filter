@@ -8,6 +8,7 @@ import numpy as np
 import webbrowser
 from datetime import datetime, timezone
 from history import get_today_in_history
+from collections import defaultdict
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))  # Ensure working directory is the script's directory
 
@@ -20,10 +21,11 @@ from textual.widgets import Header, Footer, Checkbox, Button, Static, Label, Inp
 from textual.worker import get_current_worker
 from textual.binding import Binding
 
-from fetch import CATEGORIES, fetch_today, is_arxiv_closed_today
+from fetch import CATEGORIES, CATEGORY_KEYWORDS, fetch_today, is_arxiv_closed_today
 from summarize import summarize_all
+from classify import matching_keywords
 from embed import embed_all, load_existing_embeddings, EMBEDDINGS_FILE, EMBEDDING_IDS_FILE
-from cosmo_email import matches_preferred_author
+from cosmo_email import matches_preferred_author, CATEGORY_GROUPS
 from label import(
     interleave_by_category,
     load_all_labels,
@@ -31,6 +33,11 @@ from label import(
     explain_simply,
     explain_result,
     LABELS_FILE,
+    load_starred_papers,
+    save_starred_papers,
+    goal_already_met,
+    DEFAULT_GOAL_POS,
+    DEFAULT_GOAL_NEG,
 )
 
 # Utility Functions
@@ -40,9 +47,6 @@ def escape_markup(text: str) -> str:
 RAW_FILE = "papers_raw.json"
 SUMMARIZED_FILE = "papers_summarized.json"
 PREFERENCES_FILE = "preferences.json"
-
-DEFAULT_GOAL_POS = 50
-DEFAULT_GOAL_NEG = 50
 
 # Human-readable descriptions for the category check boxes:
 
@@ -185,12 +189,6 @@ def summarized_file_is_fresh() -> bool:
         return False
     mtime_date = datetime.fromtimestamp(os.path.getmtime(SUMMARIZED_FILE)).date()
     return mtime_date == datetime.now().date()
-
-def goal_already_met() -> bool:
-    rows = load_all_labels(LABELS_FILE)
-    n_pos = sum(1 for r in rows if r["label"] == "1")
-    n_neg = sum(1 for r in rows if r["label"] == "0")
-    return n_pos >= DEFAULT_GOAL_POS and n_neg >= DEFAULT_GOAL_NEG
 
 DAILY_LABEL_GOAL = 5
 COSMO_PAPERS_COUNT = 10
@@ -636,6 +634,13 @@ def grouped_categories() -> dict[str, list[str]]:
             groups["Other Core Categories"].append(code)
     return groups
 
+# Included vertical scroll class to enable up/down key navigation for category selection
+class FocusableCategoryList(VerticalScroll):
+    BINDINGS = [
+        ("up", "app.focus_previous", "Up"),
+        ("down", "app.focus_next", "Down"),
+    ]
+
 # Screen: Category Selection
 class CategoryScreen(Screen):
     """
@@ -689,6 +694,12 @@ class CategoryScreen(Screen):
     .author-name { width: 1fr; color: #c0caf5; }
     .remove-author-btn { min-width: 3; background: #414868; color: #c0caf5; border: none; }
     .remove-author-btn:focus { background: #f7768e; color: #1a1b26; }
+
+    .keyword-block { margin-left: 4; }
+    .keyword-block.hidden { display: none; }
+    Checkbox.keyword-checkbox { color: #7aa2f7; }
+    Checkbox.keyword-checkbox > .toggle--label { color: #565f89; }
+    Checkbox.keyword-checkbox.-on > .toggle--label { color: #7aa2f7; }
     """
 
 
@@ -696,13 +707,27 @@ class CategoryScreen(Screen):
         yield Static("Select arXiv categories to fetch papers from:", id="category-title")
         saved = load_saved_categories()
         default_selected = set(saved) if saved else set()
-        with VerticalScroll(id="category-list"):
+        saved_keywords: dict[str, list[str]] = load_preferences().get("preferred_keywords", {})
+        with FocusableCategoryList(id="category-list"):
             for group_label, codes in grouped_categories().items():
                 if not codes:
                     continue
                 with Collapsible(title = group_label, collapsed=True):
                     for code in codes:
-                        yield Checkbox(CATEGORY_LABELS.get(code, code), value = (code in default_selected), id = _safe_id(code))
+                        is_selected = code in default_selected
+                        cb = Checkbox(CATEGORY_LABELS.get(code, code), value = is_selected, id = _safe_id(code), classes="category-checkbox")
+                        cb.category_code = code
+                        yield cb
+
+                        selected_keywords = set(saved_keywords.get(code, []))
+                        block = Vertical(classes="keyword-block" if is_selected else "keyword-block hidden")
+                        block.category_code = code
+                        with block:
+                            for kw in CATEGORY_KEYWORDS.get(code, []):
+                                kw_cb = Checkbox(kw, value=(kw in selected_keywords), classes="keyword-checkbox")
+                                kw_cb.category_code = code
+                                kw_cb.keyword_text = kw
+                                yield kw_cb
         yield Static("Preferred authors (their papers will always be included):", id="author-title")
         with Vertical(id="author-section"):
             yield Input(placeholder="Author Name", id="author-input")
@@ -713,6 +738,28 @@ class CategoryScreen(Screen):
                     yield self._build_author_row(name)
         yield Button("Continue", id="continue-btn", variant = "primary")
         yield Footer()
+
+    def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
+        checkbox = event.checkbox
+        if checkbox.has_class("category-checkbox"):
+            for block in self.query(".keyword-block"):
+                if getattr(block, "category_code", None) == checkbox.category_code:
+                    if event.value:
+                        block.remove_class("hidden")
+                    else:
+                        block.add_class("hidden")
+                    break
+        elif checkbox.has_class("keyword-checkbox"):
+            prefs = load_preferences()
+            preferred_keywords = prefs.get("preferred_keywords", {})
+            current = set(preferred_keywords.get(checkbox.category_code, []))
+            if event.value:
+                current.add(checkbox.keyword_text)
+            else:
+                current.discard(checkbox.keyword_text)
+            preferred_keywords[checkbox.category_code] = sorted(current)
+            prefs["preferred_keywords"] = preferred_keywords
+            save_preferences(prefs)
 
     def action_try_continue(self) -> None:
         selected = [
@@ -732,6 +779,12 @@ class CategoryScreen(Screen):
             self._add_author()
         elif event.button.has_class("remove-author-btn"):
             self._remove_author(event.button)
+
+    def on_input_submitted(self, event: Input.Submitted) -> None:
+        if event.input.id == "author-input":
+            self._add_author()
+        elif event.input.id == "keyword-input":
+            self._add_keyword()
 
     def on_key(self, event) -> None:
         from textual.widgets._collapsible import CollapsibleTitle
@@ -787,6 +840,10 @@ class CategoryScreen(Screen):
             "group to see and toggle its individual categories. Your "
             "selection is saved and reused automatically on future days "
             "until you change it here again.\n\n"
+            "Checking a category reveals a list of relevant keywords "
+            "beneath it — check any that match your specific interests "
+            "(e.g. \"Dark Energy\" under astro-ph.CO). A paper matching a "
+            "checked keyword gets a small boost to its Cosmo score. \n\n"
             "Below the categories, you can also list preferred authors — "
             "type a full first and last name and press Enter or Add. Any "
             "paper by a listed author is always included in your daily "
@@ -1049,6 +1106,7 @@ class ChoiceScreen(Screen):
                 yield Button("Cosmo Papers", id="cosmo-paper-btn")
                 yield Button("Daily Labeling", id="daily-btn")
                 yield Button("Indefinite Labeling", id="keep-labeling-btn")
+                yield Button("Starred Papers", id="starred-papers-btn")
             yield Static(id="choice-stars-right")
         yield Static(id="choice-stars-bottom")
         yield Footer()
@@ -1079,6 +1137,8 @@ class ChoiceScreen(Screen):
             self.action_pick_daily()
         elif event.button.id == "keep-labeling-btn":
             self.action_pick_keep_labeling()
+        elif event.button.id == "starred-papers-btn":
+            self.app.push_screen(StarredPapersScreen())
 
     def action_pick_cosmo_papers(self) -> None:
         cached = load_cosmo_papers()
@@ -1098,7 +1158,8 @@ class ChoiceScreen(Screen):
         with open(SUMMARIZED_FILE) as f:
             papers = json.load(f)
         labeled_ids = {row["arxiv_id"] for row in labels}
-        scored_all = score_all_papers(clf, embeddings_by_id, papers)
+        keywords = load_preferences().get("preferred_keywords", {})
+        scored_all = score_all_papers(clf, embeddings_by_id, papers, preferred_keywords=keywords)
         unlabeled_scored = [(score, paper) for score, paper in scored_all if paper["arxiv_id"] not in labeled_ids]
         top_papers = unlabeled_scored[:COSMO_PAPERS_COUNT]
 
@@ -1157,10 +1218,11 @@ class ChoiceScreen(Screen):
             "ask you to label just a handful of the papers your classifier "
             "is least confident about, completing it gives a daily reward. "
             "Indefinite Labeling lets you keep manually labeling papers with "
-            "no set goal — your running totals are shown instead of progress bars. ",
+            "no set goal — your running totals are shown instead of progress "
+            "bars. Starred Papers lets you browse everything you've starred "
+            "so far, organized by field and keyword.",
             [("w/s or ↑/↓", "Move focus"), ("space/enter", "Select"), ("q", "Quit")]
         ))
-
     def action_quit(self) -> None:
         self.app.exit()
 
@@ -1218,6 +1280,8 @@ class LabelScreen(Screen):
         self.session_decisions: dict[str, dict] = {}
         self.explanation_cache: dict[str, dict[str, str]] = {}
         self.goal_announced = False
+        self.preferred_keywords: dict[str, list[str]] = {}
+        self.preferred_authors: dict[str, list[str]] = {}
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -1255,6 +1319,10 @@ class LabelScreen(Screen):
         self.pre_existing = load_all_labels(LABELS_FILE)
         pre_ids = {r["arxiv_id"] for r in self.pre_existing}
         self.papers = [p for p in all_papers if p["arxiv_id"] not in pre_ids]
+
+        prefs = load_preferences()
+        self.preferred_keywords = prefs.get("preferred_keywords", {})
+        self.preferred_authors = prefs.get("preferred_authors", {})
 
         if not self.papers:
             self.query_one("#paper-body", Static).update("No new papers to label. All papers labeled for today.")
@@ -1310,10 +1378,18 @@ class LabelScreen(Screen):
             desc = "Interesting" if current == "1" else "Not interesting"
             label_note = f"\n[#e0af68](Currently labeled: {desc} - answering again changes this)[/]"
 
+        keywords = matching_keywords(paper, self.preferred_keywords)
+        keyword_line = f"\n[#7dcfff]Keywords:[/#7dcfff] {escape_markup(', '.join(keywords))}" if keywords else ""
+
+        author_line = ""
+        if matches_preferred_author(paper, self.preferred_authors):
+            author_line = "\n[#e0af68]★ Preferred Author[/#e0af68]"
+
         self.query_one("#paper-title", Static).update(f"[#7dcfff]Title:[/#7dcfff] {escape_markup(paper['title'])}")
         self.query_one("#session-count", Static).update(f"({self.index + 1}/{len(self.papers)})")
         self.query_one("#paper-body", Static).update(
-            f"[#7dcfff]Category:[/#7dcfff] {escape_markup(paper.get('categories', 'unknown'))}\n\n"
+            f"[#7dcfff]Category:[/#7dcfff] {escape_markup(paper.get('categories', 'unknown'))}"
+            f"{keyword_line}{author_line}\n\n"
             f"[#7dcfff]Summary:[/#7dcfff]\n{escape_markup(paper['short_description'])}\n\n"
             f"[#7dcfff]Link:[/#7dcfff] [link='{paper['link']}'][#7aa2f7 underline]{paper['link']}[/#7aa2f7 underline][/link]"
             f"{label_note}"
@@ -1545,10 +1621,15 @@ class DailyLabelScreen(Screen):
 
         paper = self.papers[self.index]
         preferred_note = "  [#e0af68 bold]\u2605 Preferred Author[/#e0af68 bold]" if matches_preferred_author(paper) else ""
-        self.query_one("#paper-title", Static).update(f"[#7dcfff]Title:[/#7dcfff] {escape_markup(paper['title'])}")
+        self.query_one("#paper-title", Static).update(f"[#7dcfff]Title:[/#7dcfff] {escape_markup(paper['title'])}{preferred_note}")
         self.query_one("#session-count", Static).update(f"({self.index + 1}/{len(self.papers)})")
+
+        from classify import matching_keywords
+        keywords = matching_keywords(paper, load_preferences().get("preferred_keywords", {}))
+        keyword_line = f"\n[#e0af68]Keywords:[/#e0af68] {escape_markup(', '.join(keywords))}" if keywords else ""
+
         self.query_one("#paper-body", Static).update(
-            f"[#7dcfff]Category:[/#7dcfff] {escape_markup(paper.get('categories', 'unknown'))}\n\n"
+            f"[#7dcfff]Category:[/#7dcfff] {escape_markup(paper.get('categories', 'unknown'))}{keyword_line}\n\n"
             f"[#7dcfff]Summary:[/#7dcfff]\n{escape_markup(paper['short_description'])}\n\n"
             f"[#7dcfff]Link:[/#7dcfff] [link='{paper['link']}'][#7aa2f7 underline]{paper['link']}[/#7aa2f7 underline][/link]"
         )
@@ -1592,6 +1673,7 @@ class DailyLabelScreen(Screen):
             "title": paper["title"],
             "link": paper["link"],
             "label": label,
+            "starred": "0",
             "labeled_at": datetime.now(timezone.utc).isoformat()
         }
         if is_new:
@@ -1691,11 +1773,12 @@ class CosmoPaperScreen(Screen):
     #explanation { border: round #3b4261; padding: 1 2; margin: 0 2 1 2; background: #16161e; color: #9aa5ce; }
     """
 
-    def __init__(self, scored_papers: list[tuple[float, dict]]) -> None:
+    def __init__(self, scored_papers: list[tuple[float, dict]], from_starred: bool = False) -> None:
         super().__init__()
         self.scored_papers = scored_papers
         self.index = 0
-        self.starred_ids: set[str] = set()
+        self.from_starred = from_starred
+        self.starred_ids: set[str] = {p["arxiv_id"] for _, p in scored_papers} if from_starred else set()
         self.star_timestamps: dict[str, str] = {}
         self.rejected_ids: set[str] = set()
         self.reject_timestamps: dict[str, str] = {}
@@ -1731,8 +1814,13 @@ class CosmoPaperScreen(Screen):
 
         self.query_one("#paper-title", Static).update(f"[#7dcfff]Title:[/#7dcfff] {escape_markup(paper['title'])}{status_note}")
         self.query_one("#session-count", Static).update(f"({self.index + 1}/{len(self.scored_papers)}) Score: {score:.0%}")
+
+        from classify import matching_keywords
+        keywords = matching_keywords(paper, load_preferences().get("preferred_keywords", {}))
+        keyword_line = f"\n[#e0af68]Keywords:[/#e0af68] {escape_markup(', '.join(keywords))}" if keywords else ""
+
         self.query_one("#paper-body", Static).update(
-            f"[#7dcfff]Category:[/#7dcfff] {escape_markup(paper.get('categories', 'unknown'))}\n\n"
+            f"[#7dcfff]Category:[/#7dcfff] {escape_markup(paper.get('categories', 'unknown'))}{keyword_line}\n\n"
             f"[#7dcfff]Summary:[/#7dcfff]\n{escape_markup(paper['short_description'])}\n\n"
             f"[#7dcfff]Link:[/#7dcfff] [link='{paper['link']}'][#7aa2f7 underline]{paper['link']}[/#7aa2f7 underline][/link]"
         )
@@ -1750,7 +1838,7 @@ class CosmoPaperScreen(Screen):
     def action_star(self) -> None:
         if not self.scored_papers:
             return
-        _, paper = self.scored_papers[self.index]
+        score, paper = self.scored_papers[self.index]
         arxiv_id = paper["arxiv_id"]
 
         if paper["arxiv_id"] in self.starred_ids:
@@ -1767,6 +1855,7 @@ class CosmoPaperScreen(Screen):
                     "title": paper["title"],
                     "link": paper["link"],
                     "label": "1",
+                    "starred": "1",
                     "labeled_at": now
                 }
                 for _ in range(STAR_WEIGHT)
@@ -1775,18 +1864,29 @@ class CosmoPaperScreen(Screen):
             self.starred_ids.add(arxiv_id)
             self.star_timestamps[arxiv_id] = now
 
+            starred_papers = load_starred_papers()
+            starred_papers[arxiv_id] = {**paper, "score": score}
+            save_starred_papers(starred_papers)
+
         self.render_paper()
 
-    def _clear_star(self,arxiv_id: str) -> None:
-        timestamp = self.star_timestamps.get(arxiv_id)
+    def _clear_star(self, arxiv_id: str) -> None:
         self.starred_ids.discard(arxiv_id)
-        if timestamp is not None:
-            pre_existing = load_all_labels(LABELS_FILE)
-            filtered = [
-                row for row in pre_existing
-                if not (row["arxiv_id"] == arxiv_id and row["label"] == "1" and row["labeled_at"] == timestamp)
-            ]
-            write_labels(LABELS_FILE, filtered)
+        self.star_timestamps.pop(arxiv_id, None)
+        pre_existing = load_all_labels(LABELS_FILE)
+        filtered = [
+            row for row in pre_existing
+            if not (row["arxiv_id"] == arxiv_id and row["label"] == "1" and row.get("starred") == "1")
+        ]
+        write_labels(LABELS_FILE, filtered)
+        starred_papers = load_starred_papers()
+        starred_papers.pop(arxiv_id, None)
+        save_starred_papers(starred_papers)
+
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        if action == "reject" and self.from_starred:
+            return False
+        return True
 
     def action_reject(self) -> None:
         if not self.scored_papers:
@@ -1807,6 +1907,7 @@ class CosmoPaperScreen(Screen):
                 "title": paper["title"],
                 "link": paper["link"],
                 "label": "0",
+                "starred": "0",
                 "labeled_at": now
             }
             write_labels(LABELS_FILE, pre_existing + [new_row])
@@ -1863,6 +1964,10 @@ class CosmoPaperScreen(Screen):
         self.app.exit()
 
     def action_help(self) -> None:
+        bindings = [("n", "Next"), ("b", "Previous"), ("s", "Unstar & Remove" if self.from_starred else "Star")]
+        if not self.from_starred:
+            bindings.append(("x", "Not Interesting"))
+        bindings += [("d", "Detail Explanation"), ("r", "Key Result Explanation"), ("o", "Open Link"), ("esc", "Back to Menu"), ("q", "Quit")]
         self.app.push_screen(HelpModal(
             "Cosmo Papers shows the top papers Cosmo learned as the "
             "papers most likely to interest you, based on everything "
@@ -1870,7 +1975,92 @@ class CosmoPaperScreen(Screen):
             "genuinely stand out — starring adds it to your training data "
             "with extra weight, helping the classifier learn faster from "
             "your strongest signals.",
-            [("n", "Next"), ("b", "Previous"), ("s", "Star"), ("x", "Not Interesting"), ("d", "Detail Explanation"), ("r", "Key Result Explanation"), ("o", "Open Link"), ("esc", "Back to Menu"), ("q", "Quit")]
+            bindings
+        ))
+
+class StarredPapersScreen(Screen):
+    BINDINGS = [
+        ("h", "help", "HELP"),
+        ("q", "quit", "Quit"),
+        ("escape", "back", "Back"),
+    ]
+
+    CSS = """
+    #starred-title { padding: 1 2; text-style: bold; color: #7dcfff; }
+    #starred-list { padding: 0 2; background: #1a1b26; }
+
+    Collapsible { background: #1a1b26; border-top: none; }
+    Collapsible > CollapsibleTitle { background: #1a1b26; }
+    Collapsible > Contents { background: #1a1b26; }
+
+    CollapsibleTitle { color: #565f89; }
+    CollapsibleTitle:hover { background: #1a1b26; color: #7dcfff; }
+    CollapsibleTitle:focus { background: #1a1b26; color: #ff9e64; text-style: bold underline; }
+
+    .paper-btn { width: 1fr; background: #1a1b26; color: #565f89; border: none; text-align: left; }
+    .paper-btn:focus { background: #1a1b26; color: #e0af68; text-style: bold; }
+    """
+
+    def compose(self) -> ComposeResult:
+        yield Static("Starred Papers", id="starred-title")
+        starred = load_starred_papers()
+
+        with FocusableCategoryList(id="starred-list"):
+            if not starred:
+                yield Static("No starred papers yet — star papers from Cosmo Papers to build this list.")
+            else:
+                from classify import matching_keywords
+                preferred_keywords = load_preferences().get("preferred_keywords", {})
+                
+                by_field: dict[str, list[dict]] = defaultdict(list)
+                for paper in starred.values():
+                    primary_category = paper.get("categories", "unknown").split(",")[0].strip()
+                    field_name = CATEGORY_GROUPS.get(primary_category, primary_category)
+                    by_field[field_name].append(paper)
+
+                for field_name in sorted(by_field):
+                    field_papers = by_field[field_name]
+                    with Collapsible(title=f"{field_name} ({len(field_papers)})", collapsed=True):
+                        by_keyword: dict[str, list[dict]] = defaultdict(list)
+                        for paper in field_papers:
+                            matched = matching_keywords(paper, preferred_keywords)
+                            if matched:
+                                for kw in matched:
+                                    by_keyword[kw].append(paper)
+                            else:
+                                by_keyword["Other"].append(paper)
+
+                        for kw_name in sorted(by_keyword, key=lambda k: (k == "Other", k)):
+                            kw_papers = by_keyword[kw_name]
+                            with Collapsible(title=f"{kw_name} ({len(kw_papers)})", collapsed=True):
+                                for paper in kw_papers:
+                                    btn = Button(paper["title"][:70], classes="paper-btn")
+                                    btn.paper_arxiv_id = paper["arxiv_id"]
+                                    yield btn
+        yield Footer()
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.has_class("paper-btn"):
+            starred = load_starred_papers()
+            paper = starred.get(event.button.paper_arxiv_id)
+            if paper is not None:
+                self.app.push_screen(CosmoPaperScreen([(paper.get("score", 1.0), paper)], from_starred = True))
+
+    def action_back(self) -> None:
+        self.app.pop_screen()
+
+    def action_quit(self) -> None:
+        self.app.exit()
+
+    def action_help(self) -> None:
+        self.app.push_screen(HelpModal(
+            "Browse papers you've starred, organized by field and then by "
+            "your preferred keywords (papers matching none of your "
+            "keywords land under \"Other\"). Selecting a paper opens the "
+            "same detail view as Cosmo Papers, where you can read the "
+            "summary, request a detail/key-result explanation, open the "
+            "link, or un-star/reject it.",
+            [("enter/space", "Open paper"), ("escape", "Back"), ("q", "Quit")]
         ))
 
     

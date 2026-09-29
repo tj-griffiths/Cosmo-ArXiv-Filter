@@ -10,7 +10,7 @@ from api import generate as generate_with_api
 INPUT_FILE = "papers_summarized.json"
 LABELS_FILE = "labels.csv"
 
-CSV_FIELDS = ["arxiv_id", "title", "link", "label", "labeled_at"]
+CSV_FIELDS = ["arxiv_id", "title", "link", "label","starred","labeled_at"]
 
 # Load papers
 
@@ -31,6 +31,30 @@ def write_labels(path: str, records: list[dict]) -> None:
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS)
         writer.writeheader()
         writer.writerows(records)
+
+STARRED_PAPERS_FILE = "starred_papers.json"
+
+def load_starred_papers() -> dict[str, dict]:
+    if not os.path.exists(STARRED_PAPERS_FILE):
+        return {}
+    with open(STARRED_PAPERS_FILE) as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return {}
+        
+def save_starred_papers(data: dict[str, dict]) -> None:
+    with open(STARRED_PAPERS_FILE, "w") as f:
+        json.dump(data, f, indent=2)
+
+DEFAULT_GOAL_POS = 50
+DEFAULT_GOAL_NEG = 50
+
+def goal_already_met() -> bool:
+    rows = load_all_labels(LABELS_FILE)
+    n_pos = sum(1 for r in rows if r["label"] == "1")
+    n_neg = sum(1 for r in rows if r["label"] == "0")
+    return n_pos >= DEFAULT_GOAL_POS and n_neg >= DEFAULT_GOAL_NEG
 
 
 def explain_simply(abstract: str) -> str:
@@ -171,6 +195,7 @@ def run_labeling_session(papers: list[dict], scores_by_id: dict[str, float] | No
             "title": paper["title"],
             "link": paper["link"],
             "label": answer,
+            "starred": "0",
             "labeled_at": datetime.now(timezone.utc).isoformat()
         }
         flush()

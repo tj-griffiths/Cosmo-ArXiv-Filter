@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 from fetch import CATEGORIES, fetch_today, is_arxiv_closed_today
 from summarize import summarize_all
 from embed import embed_all, load_existing_embeddings, EMBEDDINGS_FILE, EMBEDDING_IDS_FILE
-from classify import load_embeddings, load_labels, build_training_set, train_and_evaluate, score_all_papers
+from classify import load_embeddings, load_labels, build_training_set, train_and_evaluate, score_all_papers, matching_keywords
 import numpy as np
 import html
 from collections import defaultdict
@@ -84,21 +84,17 @@ def _normalize_name(name: str) -> tuple[str, str] | None:
     last_name = parts[-1].lower()
     return first_initial, last_name
 
-# Checks if any of the authors of a paper match the preferred authors list
+def _author_match(paper: dict, name: str) -> bool:
+    target = _normalize_name(name)
+    if target is None:
+        return False
+    paper_author_keys = {_normalize_name(a) for a in paper.get("authors", [])}
+    return target in paper_author_keys
+
+
 def matches_preferred_author(paper: dict, preferred: list[str] | None = None) -> bool:
-    if preferred is None:
-        preferred = [a.strip() for a in load_preferences().get("preferred_authors", []) if a.strip()]
-    if not preferred:
-        return False
-    preferred_keys = {_normalize_name(name) for name in preferred}
-    preferred_keys.discard(None)
-    if not preferred_keys:
-        return False
-    for author in paper.get("authors", []):
-        key = _normalize_name(author)
-        if key is not None and key in preferred_keys:
-            return True
-    return False
+    preferred = preferred or []
+    return any(_author_match(paper, name) for name in preferred)
 
 def should_send_today(prefs: dict) -> bool:
     frequency = prefs.get("email_frequency", "daily")
@@ -151,7 +147,7 @@ def get_gmail_credentials() -> tuple[str, str] | None:
         return None
     return lines[0], lines[1]
 
-def send_digest_email(recipient: str, papers: list[tuple[float, dict]], preferred_ids: set[str] | None = None) -> bool:
+def send_digest_email(recipient: str, papers: list[tuple[float, dict]], preferred_ids: set[str] | None = None, preferred_keywords: dict[str, list[str]] | None = None) -> bool:
     creds = get_gmail_credentials()
     if creds is None:
         print("No gmail_credentials.txt found - skipping email.")
@@ -176,8 +172,10 @@ def send_digest_email(recipient: str, papers: list[tuple[float, dict]], preferre
             title = html.escape(paper["title"])
             summary = html.escape(paper["short_description"])
             link = html.escape(paper["link"])
+            keywords = matching_keywords(paper, preferred_keywords)
+            keyword_line = f"<br><b>Keywords:</b> {html.escape(', '.join(keywords))}" if keywords else ""
             parts.append(
-                f'<p><b>Title:</b> <u>{title}</u><br>'
+                f'<p><b>Title:</b> <u>{title}</u>{keyword_line}<br>'
                 f'<b>Summary:</b> {summary}<br>'
                 f'<a href="{link}">{link}</a></p>'
             )
@@ -188,8 +186,10 @@ def send_digest_email(recipient: str, papers: list[tuple[float, dict]], preferre
             title = html.escape(paper["title"])
             summary = html.escape(paper["short_description"])
             link = html.escape(paper["link"])
+            keywords = matching_keywords(paper, preferred_keywords)
+            keyword_line = f"<br><b>Keywords:</b> {html.escape(', '.join(keywords))}" if keywords else ""
             parts.append(
-                f'<p><b>Title:</b> <u>{title}</u><br>'
+                f'<p><b>Title:</b> <u>{title}</u>{keyword_line}<br>'
                 f'<b>Summary:</b> {summary}<br>'
                 f'<a href="{link}">{link}</a></p>'
             )
@@ -210,6 +210,8 @@ def send_digest_email(recipient: str, papers: list[tuple[float, dict]], preferre
         return False
     
 def maybe_send_daily_email(papers: list[dict]) -> None:
+    PREFERRED_AUTHOR_DAILY_CAP = 3
+
     prefs = load_preferences()
     if not prefs.get("email_opt_in") or not prefs.get("email"):
         return
@@ -227,19 +229,30 @@ def maybe_send_daily_email(papers: list[dict]) -> None:
         return
 
     labeled_ids = {row["arxiv_id"] for row in labels}
-    scored_all = score_all_papers(clf, embeddings_by_id, papers)
+    keywords = prefs.get("preferred_keywords", [])
+    scored_all = score_all_papers(clf, embeddings_by_id, papers, preferred_keywords=keywords)
     unlabeled_scored = [(score, p) for score, p in scored_all if p["arxiv_id"] not in labeled_ids]
 
     preferred = [a.strip() for a in prefs.get("preferred_authors", []) if a.strip()]
-    guaranteed = [(score,p) for score, p in unlabeled_scored if matches_preferred_author(p, preferred)]
-    guaranteed_ids = {p["arxiv_id"] for _, p in guaranteed}
+    guaranteed: list[tuple[float, dict]] = []
+    guaranteed_ids: set[str] = set()
+    for name in preferred:
+        matches = [
+            (score, p) for score, p in unlabeled_scored
+            if _author_match(p, name) and p["arxiv_id"] not in guaranteed_ids
+        ]
+        matches.sort(key=lambda pair: pair[0], reverse=True)
+        top_matches = matches[:PREFERRED_AUTHOR_DAILY_CAP]
+        guaranteed.extend(top_matches)
+        guaranteed_ids.update(p["arxiv_id"] for _, p in top_matches)
+
     remaining = [(score, p) for score, p in unlabeled_scored if p["arxiv_id"] not in guaranteed_ids]
 
     email_count = prefs.get("email_paper_count", COSMO_PAPERS_COUNT)
     remaining_slots = max(0, email_count - len(guaranteed))
     top_papers = guaranteed + remaining[:remaining_slots]
 
-    sent = send_digest_email(prefs["email"], top_papers, preferred_ids=guaranteed_ids)
+    sent = send_digest_email(prefs["email"], top_papers, preferred_ids=guaranteed_ids, preferred_keywords= keywords)
     prefs["last_email_sent_date"] = date.today().isoformat()
     save_preferences(prefs)
 

@@ -10,6 +10,8 @@ from sklearn.linear_model import LogisticRegression
 
 from sklearn.model_selection import cross_val_score
 
+from label import goal_already_met
+
 EMBEDDINGS_FILE = "embeddings.npy"
 EMBEDDINGS_IDS_FILE = "embedding_ids.json"
 LABELS_FILE = "labels.csv"
@@ -67,15 +69,34 @@ def train_and_evaluate(X: np.ndarray, y: np.ndarray) -> LogisticRegression:
     clf.fit(X,y)
     return clf
 
+def matching_keywords(paper: dict, preferred_keywords: dict[str, list[str]]) -> list[str]:
+    if not preferred_keywords:
+        return []
+    paper_categories = [c.strip() for c in paper.get("categories", "unknown").split(",")]
+    candidate_keywords: set[str] = set()
+    for category in paper_categories:
+        candidate_keywords.update(preferred_keywords.get(category, []))
+    if not candidate_keywords:
+        return []
+    text = f"{paper.get('title', '')} {paper.get('abstract', '')}".lower()
+    return sorted(kw for kw in candidate_keywords if kw.lower() in text)
+
+
+def _keyword_boost(paper: dict, preferred_keywords: dict[str, list[str]], boost_per_match: float = 0.01) -> float:
+    return boost_per_match * len(matching_keywords(paper, preferred_keywords))
+
 # Score every paper
 
-def score_all_papers(clf: LogisticRegression, embeddings_by_ids: dict, papers: list[dict]) -> list[tuple[float, dict]]:
+def score_all_papers(clf: LogisticRegression, embeddings_by_ids: dict, papers: list[dict], preferred_keywords: dict[str, list[str]] | None = None) -> list[tuple[float, dict]]:
     scored = []
+    apply_boost = not goal_already_met()
     for paper in papers:
         embeddings = embeddings_by_ids.get(paper["arxiv_id"])
         if embeddings is None:
             continue
-        relevance_score = clf.predict_proba([embeddings])[0][1] # Probability of being relevant
+        relevance_score = clf.predict_proba([embeddings])[0][1]
+        if apply_boost:
+            relevance_score = min(1.0, relevance_score + _keyword_boost(paper, preferred_keywords or {}))
         scored.append((relevance_score, paper))
     scored.sort(key=lambda pair: pair[0], reverse=True)
     return scored
