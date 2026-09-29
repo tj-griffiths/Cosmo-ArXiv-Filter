@@ -8,6 +8,7 @@ __pycache__/
 .env
 venv/
 user_config.txt
+cosmo.cmd
 
 # Test
 test_affiliation_coverage.py
@@ -23,3 +24,4 @@ classifier.pkl
 preferences.json
 daily_run_error.log
 daily_run.log
+labels.csv
