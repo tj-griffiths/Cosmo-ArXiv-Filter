@@ -142,20 +142,52 @@ this makes the `cosmo` command always use the conda environment's Python.
 
 ### 2. Add your credentials
 
-These are personal, so no installer can fill them in for you. Each is a small
-text file in the Cosmo folder, and all of them are gitignored.
+Only `user_config.txt` is required — Cosmo runs fully without any of the
+others. Add the rest only if you want that specific feature; skip anything
+you don't care about.
 
-- **`user_config.txt`** — your email, used to build a polite `User-Agent` string for arXiv requests. One line: `your.email@example.com`
-- **`gmail_credentials.txt`** — sender Gmail address, then a Gmail [app password](https://myaccount.google.com/apppasswords), for the daily email:
+Each one is a plain text file **you create yourself**, saved directly inside
+the Cosmo folder (the same folder `app.py` lives in). They're already listed
+in `.gitignore`, so they're safe from ever being committed.
 
-```
-  your.email@gmail.com
-  abcdabcdabcdabcd
-```
+**Required**
 
-  The app password is the 16-character code Google generates, not your regular password. Spaces shown on Google's site can be included or stripped; either works.
-- **`groq_api_key.txt`** — a free key from [console.groq.com/keys](https://console.groq.com/keys), powers the on-demand "detail"/"key result" explanations in the labeling screens. One line: `gsk_abcdefghijklmnopqrstuvwxyz1234567890ABCD`. A `GROQ_API_KEY` environment variable works too and takes priority if both are set. Optionally, `groq_model.txt` (or `GROQ_MODEL`) overrides the default model — e.g. `openai/gpt-oss-20b`.
-- **Desktop notifications (optional):** `pip install plyer`. No config file needed; it just works once installed. Skip it and notifications silently no-op.
+- `user_config.txt` — one line, your email:
+
+`your.email@example.com`
+
+  Used only to build a polite identifying string when Cosmo requests papers from arXiv.
+
+**Optional — AI explanations (the `d`/`r` keys on labeling screens)**
+
+- Get a free key at [console.groq.com/keys](https://console.groq.com/keys).
+- Create a file named `groq_api_key.txt` in the Cosmo folder.
+- Paste just the key as the only line in that file:
+
+`gsk_abcdefghijklmnopqrstuvwxyz1234567890ABCD`
+
+- Save it, then (re)launch Cosmo — the `d`/`r` explanation keys will now work on the labeling screens.
+- Skip this and those two keys simply won't show up; nothing else about Cosmo is affected.
+- *(Advanced/optional: a `GROQ_API_KEY` environment variable works instead of the file if you already use those. A `groq_model.txt` file can override the default AI model, but the default is fine for most people — ignore this unless you have a reason to change it.)*
+
+**Optional — daily email digest**
+
+- Create a file named `gmail_credentials.txt` in the Cosmo folder.
+- Two lines: your Gmail address, then a Gmail [app password](https://myaccount.google.com/apppasswords) (a 16-character code Google generates — not your normal Gmail password):
+
+`your.email@gmail.com`
+
+`abcdabcdabcdabcd`
+
+- Turn email on inside Cosmo itself: press `g` from anywhere to open Settings, and enable it there.
+- Skip this and email just stays off — no errors, no reminders.
+
+**Optional — desktop notifications**
+
+- Run `pip install plyer` (or `conda install -c conda-forge plyer` if you're using conda).
+- No file to create — once installed, Cosmo will pop a system notification when the daily email goes out.
+- Skip this and notifications just don't appear.
+
 
 ### 3. Launch
 

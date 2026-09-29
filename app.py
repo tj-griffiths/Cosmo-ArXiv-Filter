@@ -21,11 +21,12 @@ from textual.widgets import Header, Footer, Checkbox, Button, Static, Label, Inp
 from textual.worker import get_current_worker
 from textual.binding import Binding
 
+from api import has_api_key
 from fetch import CATEGORIES, CATEGORY_KEYWORDS, fetch_today, is_arxiv_closed_today
 from summarize import summarize_all
 from classify import matching_keywords
 from embed import embed_all, load_existing_embeddings, EMBEDDINGS_FILE, EMBEDDING_IDS_FILE
-from cosmo_email import matches_preferred_author, CATEGORY_GROUPS
+from cosmo_email import matches_preferred_author, CATEGORY_GROUPS, get_gmail_credentials
 from label import(
     interleave_by_category,
     load_all_labels,
@@ -477,6 +478,8 @@ class SettingsScreen(ModalScreen):
     #settings-box Checkbox:focus > .toggle--label { color: #e0af68; text-style: bold; background: #1a1b26; }
     #settings-box Checkbox:focus > .toggle--button { color: #e0af68; text-style: bold; background: #1a1b26; }
 
+    #gmail-status { color: #e0af68; text-style: italic; height: auto; margin-top: 0; }
+
     #settings-box RadioSet { border: none; background: #1a1b26; padding: 0; }
     #settings-box RadioSet:focus { border: none; background: #1a1b26; }
     #settings-box RadioButton { background: #1a1b26; color: #565f89; }
@@ -513,6 +516,7 @@ class SettingsScreen(ModalScreen):
         with Vertical(id="settings-box"):
             yield Static("Settings", id="settings-title")
             yield Checkbox("Opt in to Email Address", value=self.initial_email_opt_in, id="email-opt-in-checkbox")
+            yield Static("", id="gmail-status")
             yield Label("Email Address:")
             yield Input(value=self.initial_email, placeholder="you@example.com", id="email-input")
             yield Static("", id="email-error")
@@ -548,6 +552,21 @@ class SettingsScreen(ModalScreen):
                 weekday_block.remove_class("hidden")
             else:
                 weekday_block.add_class("hidden")
+
+    def on_mount(self) -> None:
+        self._update_gmail_status()
+
+    def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
+        if event.checkbox.id == "email-opt-in-checkbox":
+            self._update_gmail_status()
+
+    def _update_gmail_status(self) -> None:
+        opt_in = self.query_one("#email-opt-in-checkbox", Checkbox).value
+        status = self.query_one("#gmail-status", Static)
+        if opt_in and get_gmail_credentials() is None:
+            status.update("⚠ gmail_credentials.txt not found or incomplete — email won't send until it's added.")
+        else:
+            status.update("")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "save-settings-btn":
@@ -695,7 +714,13 @@ class CategoryScreen(Screen):
     .remove-author-btn { min-width: 3; background: #414868; color: #c0caf5; border: none; }
     .remove-author-btn:focus { background: #f7768e; color: #1a1b26; }
 
-    .keyword-block { margin-left: 4; }
+    .keyword-block {
+        margin-left: 4;
+        height: auto;
+        layout: grid;
+        grid-size: 3;
+        grid-gutter: 0 2;
+    }
     .keyword-block.hidden { display: none; }
     Checkbox.keyword-checkbox { color: #7aa2f7; }
     Checkbox.keyword-checkbox > .toggle--label { color: #565f89; }
@@ -1308,7 +1333,7 @@ class LabelScreen(Screen):
                 yield Static("", id="paper-title")
                 yield Static("", id="session-count")
             yield Static(id="paper-body")
-        yield Static(id="explanation")
+        yield Static(id="explanation", classes="" if has_api_key() else "hidden")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -1368,7 +1393,8 @@ class LabelScreen(Screen):
             progress_neg.update(progress = min(n_neg, self.goal_neg))
     
     def render_paper(self) -> None:
-        self.query_one("#explanation", Static).update("")
+        if has_api_key():
+            self.query_one("#explanation", Static).update("")
         self._update_progress()
 
         paper = self.papers[self.index]
@@ -1454,6 +1480,11 @@ class LabelScreen(Screen):
         self.index -= 1
         self.render_paper()
 
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        if action in ("detail", "result") and not has_api_key():
+            return False
+        return True
+
     def action_detail(self) -> None:
         self.show_explanation("detail", explain_simply, "Detail Explanation")
 
@@ -1490,7 +1521,10 @@ class LabelScreen(Screen):
             self.app.pop_screen()
 
     def action_help(self) -> None:
-        bindings = [("y", "Interesting"), ("n", "Not interesting"), ("s", "Skip"), ("b", "Back"), ("d", "Detail Explanation"), ("r", "Key Result Explanation"), ("o", "Open's Paper in Browser")]
+        bindings = [("y", "Interesting"), ("n", "Not interesting"), ("s", "Skip"), ("b", "Back"),]
+        if has_api_key():
+            bindings +=  [("d", "Detail Explanation"), ("r", "Key Result Explanation")]
+        bindings.append("o", "Open's Paper in Browser")
         if self.return_to_choice:
             bindings.append(("esc", "Back to Menu"))
         bindings.append(("q", "Quit"))
@@ -1604,7 +1638,7 @@ class DailyLabelScreen(Screen):
                 yield Static("", id="paper-title")
                 yield Static("", id="session-count")
             yield Static(id="paper-body")
-        yield Static(id="explanation")
+        yield Static(id="explanation", classes="" if has_api_key() else "hidden")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -1616,7 +1650,8 @@ class DailyLabelScreen(Screen):
         self.render_paper()
 
     def render_paper(self) -> None:
-        self.query_one("#explanation", Static).update("")
+        if has_api_key():
+            self.query_one("#explanation", Static).update("")
         self.query_one("#daily-progress", ProgressBar).update(progress=self.labeled_count)
 
         paper = self.papers[self.index]
@@ -1693,6 +1728,11 @@ class DailyLabelScreen(Screen):
             return
         self.render_paper()
 
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        if action in ("detail", "result") and not has_api_key():
+            return False
+        return True
+
     def action_detail(self) -> None:
         if not self.papers or self.index >= len(self.papers):
             return
@@ -1740,12 +1780,16 @@ class DailyLabelScreen(Screen):
         self.app.exit()
 
     def action_help(self) -> None:
+        bindings = [("y", "Interesting"), ("n", "Not interesting"), ("s", "Skip"), ("b", "Back")]
+        if has_api_key():
+            bindings += [("d", "Detail Explanation"), ("r", "Key Result Explanation")]
+        bindings.append("o", "Open's Paper in Browser"), ("esc", "Back to Menu"), ("q", "Quit")
         self.app.push_screen(HelpModal(
             "Daily Labeling picks the handful of papers your classifier is "
             "currently least confident about, so labeling just a few of "
             "them gives outsized improvement for minimal effort. Completing "
             "all 5 shows a congratulations screen and updates your streak.",
-            [("y", "Interesting"), ("n", "Not interesting"), ("s", "Skip"), ("b", "Previous Paper"), ("d", "Detail Explanation"), ("r", "Key Result Explanation"), ("o", "Open's Paper in Browser"), ("esc", "Back to Menu"), ("q", "Quit")]
+            bindings
         ))
 
 class CosmoPaperScreen(Screen):
@@ -1792,7 +1836,7 @@ class CosmoPaperScreen(Screen):
                 yield Static("", id="paper-title")
                 yield Static("", id="session-count")
             yield Static(id="paper-body")
-        yield Static(id="explanation")
+        yield Static(id="explanation", classes="" if has_api_key() else "hidden")
         yield Footer()
 
     def on_mount(self) -> None:
@@ -1802,7 +1846,8 @@ class CosmoPaperScreen(Screen):
         self.render_paper()
 
     def render_paper(self) -> None:
-        self.query_one("#explanation", Static).update("")
+        if has_api_key():
+            self.query_one("#explanation", Static).update("")
         score, paper = self.scored_papers[self.index]
         arxiv_id = paper["arxiv_id"]
         if arxiv_id in self.starred_ids:
@@ -1886,6 +1931,8 @@ class CosmoPaperScreen(Screen):
     def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
         if action == "reject" and self.from_starred:
             return False
+        if action in ("detail", "result") and not has_api_key():
+            return False
         return True
 
     def action_reject(self) -> None:
@@ -1965,9 +2012,11 @@ class CosmoPaperScreen(Screen):
 
     def action_help(self) -> None:
         bindings = [("n", "Next"), ("b", "Previous"), ("s", "Unstar & Remove" if self.from_starred else "Star")]
+        if has_api_key():
+            bindings += [("d", "Detail Explanation"), ("r", "Key Result Explanation")]
         if not self.from_starred:
             bindings.append(("x", "Not Interesting"))
-        bindings += [("d", "Detail Explanation"), ("r", "Key Result Explanation"), ("o", "Open Link"), ("esc", "Back to Menu"), ("q", "Quit")]
+        bindings += [("o", "Open Link"), ("esc", "Back to Menu"), ("q", "Quit")]
         self.app.push_screen(HelpModal(
             "Cosmo Papers shows the top papers Cosmo learned as the "
             "papers most likely to interest you, based on everything "

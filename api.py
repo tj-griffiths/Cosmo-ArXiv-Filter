@@ -40,6 +40,15 @@ def _get_api_key() -> str:
         f"this same folder (make sure that filename is in .gitignore)."
     )
 
+def has_api_key() -> bool:
+    if os.environ.get("GROQ_API_KEY"):
+        return True
+    key_file_path = os.path.join(os.path.dirname(__file__), API_KEY_FILE)
+    if os.path.exists(key_file_path):
+        with open(key_file_path) as f:
+            return bool(f.read().strip())
+    return False
+
 def _get_model()-> str:
     model = os.environ.get("GROQ_MODEL")
     if model:
