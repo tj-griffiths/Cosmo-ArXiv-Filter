@@ -42,7 +42,7 @@ def ensure_scheduler_installed() -> None:
 
 def _install_macos(cosmo_dir: str, email_script: str, hour: int, minute: int) -> None:
     wrapper_path = os.path.join(cosmo_dir, "CosmoPapers")
-    wrapper_contents = f'#!/bin/bash\nexec "{sys.executable}" "{email_script}"\n'
+    wrapper_contents = f'#!/bin/bash\nexec caffeinate -i "{sys.executable}" "{email_script}"\n'
 
     existing = None
     if os.path.exists(PLIST_PATH):
@@ -53,12 +53,13 @@ def _install_macos(cosmo_dir: str, email_script: str, hour: int, minute: int) ->
             existing = None
 
     needs_write = (
-        existing is None
-        or existing.get("StartCalendarInterval", {}).get("Hour") != hour
-        or existing.get("StartCalendarInterval", {}).get("Minute") != minute
-        or (existing.get("ProgramArguments") or [None])[0] != wrapper_path
-        or not os.path.exists(wrapper_path)
-    )
+    existing is None
+    or existing.get("StartCalendarInterval", {}).get("Hour") != hour
+    or existing.get("StartCalendarInterval", {}).get("Minute") != minute
+    or (existing.get("ProgramArguments") or [None])[0] != wrapper_path
+    or not os.path.exists(wrapper_path)
+    or (os.path.exists(wrapper_path) and open(wrapper_path).read() != wrapper_contents)
+)
     if not needs_write:
         return
 
