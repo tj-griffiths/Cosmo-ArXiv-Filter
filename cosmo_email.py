@@ -4,6 +4,7 @@ import json
 import os
 import smtplib
 import subprocess
+import time
 from datetime import date
 from email.mime.text import MIMEText
 
@@ -214,10 +215,13 @@ def maybe_send_daily_email(papers: list[dict]) -> None:
 
     prefs = load_preferences()
     if not prefs.get("email_opt_in") or not prefs.get("email"):
+        print("Email opt-in disabled or no email address set - skipping.")
         return
     if prefs.get("last_email_sent_date") == date.today().isoformat():
+        print("Already sent an email today - skipping.")
         return
     if not should_send_today(prefs):
+        print("Not scheduled to send today - skipping.")
         return
 
     from classify import load_embeddings, load_labels, build_training_set, train_and_evaluate, score_all_papers
@@ -226,6 +230,7 @@ def maybe_send_daily_email(papers: list[dict]) -> None:
     X, y = build_training_set(embeddings_by_id, labels)
     clf = train_and_evaluate(X, y)
     if clf is None:
+        print("Not enough labeled data to train a classifier - skipping email.")
         return
 
     labeled_ids = {row["arxiv_id"] for row in labels}
@@ -259,6 +264,9 @@ def maybe_send_daily_email(papers: list[dict]) -> None:
     if sent:
         notify_desktop("Cosmo", f"Sent today's {len(top_papers)} picks to {prefs['email']}.")
     
+MAX_FETCH_RETRIES = 10
+FETCH_RETRY_DELAY_SECONDS = 30
+
 def run_daily_pipeline() -> None:
     prefs = load_preferences()
 
@@ -272,10 +280,23 @@ def run_daily_pipeline() -> None:
 
     categories = load_saved_categories()
     print("Fetching today's papers...")
-    papers = fetch_today(categories)
+    papers = None
+    for attempt in range(1, MAX_FETCH_RETRIES + 1):
+        try:
+            papers = fetch_today(categories)
+            break
+        except Exception as e:
+            print(f"Fetch attempt {attempt}/{MAX_FETCH_RETRIES} failed: {e} - "
+                  f"retrying in {FETCH_RETRY_DELAY_SECONDS} seconds...")
+            time.sleep(FETCH_RETRY_DELAY_SECONDS)
+    else:
+        print("Gave up fetching after repeated failures - exiting.")
+        return
+        
     if not papers:
         print("No papers fetched - exiting.")
         return
+    
     with open(RAW_FILE, "w") as f:
         json.dump(papers, f, indent=2)
 

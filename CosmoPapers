@@ -1,2 +1,2 @@
 #!/bin/bash
-exec "/opt/anaconda3/bin/python3" "/Users/thomasgriffiths/Documents/Projects/Cosmo/cosmo_email.py"
+exec caffeinate -i "/opt/anaconda3/bin/python3" "/Users/thomasgriffiths/Documents/Projects/Cosmo/cosmo_email.py"
