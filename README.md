@@ -95,7 +95,7 @@ cd ~/Projects
 Then paste this and press Enter:
 
 ```bash
-curl -L https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip ...
+curl -L https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -o cosmo.zip && unzip cosmo.zip && rm cosmo.zip && cd Cosmo-ArXiv-Filter-main && python3 -m pip install -r requirements.txt && chmod +x install.sh && ./install.sh
 ```
 
 `install.sh` adds a `cosmo` alias to your shell profile (`~/.zshrc` or
@@ -126,7 +126,7 @@ cd $HOME\Projects
 Then paste this and press Enter:
 
 ```powershell
-$ProgressPreference='SilentlyContinue'; Invoke-WebRequest ...
+$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -OutFile cosmo.zip; Expand-Archive cosmo.zip -DestinationPath . -Force; Remove-Item cosmo.zip; cd Cosmo-ArXiv-Filter-main; python -m pip install -r requirements.txt; powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
 `install.ps1` creates a small `cosmo.cmd` launcher in the Cosmo folder and adds
@@ -144,19 +144,41 @@ shortcut to the Microsoft Store.
 <details>
 <summary><b>Using conda instead of pip (any platform)</b></summary>
 
-Run your platform's command above, but delete the `pip install -r
-requirements.txt` part and the installer step from the end. Then, from inside
-the `Cosmo-ArXiv-Filter-main` folder:
+Conda users set up Cosmo in three stages: download it, create the conda environment, then run the installer.
+
+**1. Choose where to save it.** As with the other methods, Cosmo is saved in whichever folder your terminal is open in. `cd` to the folder you want first, e.g. `cd ~/Projects` on macOS/Linux, or `cd $HOME\Projects` on Windows. (Create the folder first if it doesn't exist yet.)
+
+On Windows, open **Anaconda PowerShell Prompt** from the Start menu rather than regular PowerShell, so the `conda` commands work.
+
+**2. Download Cosmo and create the environment.**
+
+macOS / Linux:
 
 ```bash
-conda env create -f environment.yml
-conda activate cosmo
+curl -L https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -o cosmo.zip && unzip cosmo.zip && rm cosmo.zip && cd Cosmo-ArXiv-Filter-main && conda env create -f environment.yml && conda activate cosmo
 ```
 
-Then run the installer **with the environment still activated**:
-`./install.sh` on macOS/Linux, or
-`powershell -ExecutionPolicy Bypass -File .\install.ps1` on Windows. On Windows,
-this makes the `cosmo` command always use the conda environment's Python.
+Windows:
+
+```powershell
+$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -OutFile cosmo.zip; Expand-Archive cosmo.zip -DestinationPath . -Force; Remove-Item cosmo.zip; cd Cosmo-ArXiv-Filter-main; conda env create -f environment.yml; conda activate cosmo
+```
+
+**3. Run the installer in the same window**, so it uses the conda environment:
+
+macOS / Linux:
+
+```bash
+chmod +x install.sh && ./install.sh
+```
+
+Windows:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+On Windows, this makes the `cosmo` command always use the conda environment. On macOS/Linux, run `conda activate cosmo` before typing `cosmo` each time.
 
 </details>
 
