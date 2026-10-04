@@ -126,13 +126,10 @@ cd $HOME\Projects
 Then paste this and press Enter:
 
 ```powershell
-$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -OutFile cosmo.zip; Expand-Archive cosmo.zip -DestinationPath . -Force; Remove-Item cosmo.zip; cd Cosmo-ArXiv-Filter-main; python -m pip install -r requirements.txt; powershell -ExecutionPolicy Bypass -File .\install.ps1
+$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -OutFile cosmo.zip; Expand-Archive cosmo.zip -DestinationPath . -Force; Remove-Item cosmo.zip; cd Cosmo-ArXiv-Filter-main; powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-`install.ps1` creates a small `cosmo.cmd` launcher in the Cosmo folder and adds
-that folder to your user PATH, so `cosmo` works in any new PowerShell or
-Command Prompt window. `-ExecutionPolicy Bypass` applies only to that one
-installer run; it doesn't change any system settings.
+The installer downloads Cosmo's Python packages, then sets up a `cosmo` command you can use from any new PowerShell or Command Prompt window. If you use conda and your prompt starts with `(base)`, the installer will stop and ask you to create a separate environment first. The conda instructions below walk through that.
 
 If `python` isn't recognized, install Python from
 [python.org](https://www.python.org/downloads/) and tick **"Add python.exe to

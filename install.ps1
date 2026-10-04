@@ -5,9 +5,6 @@ $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $AppPath = Join-Path $ScriptDir "app.py"
 
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$AppPath = Join-Path $ScriptDir "app.py"
-
 # --- Find the real Python interpreter ---
 # Asking Python for sys.executable gives its full path, and filters out the
 # Microsoft Store "python" stub (exists on PATH but only prints an error).
@@ -26,6 +23,20 @@ if (-not $PythonExe) {
     throw "No working Python found. Install Python 3.11+ from python.org (tick 'Add python.exe to PATH'), then re-run."
 }
 Write-Host "Using Python: $PythonExe"
+
+# --- Stop if conda's base environment is active ---
+# Installing into base can upgrade packages conda's own tools rely on.
+if ($env:CONDA_DEFAULT_ENV -eq "base") {
+    throw ("Conda's base environment is active. Create a separate environment first:`n" +
+           "    conda create -n cosmo python=3.11 -y`n" +
+           "    conda activate cosmo`n" +
+           "then run this installer again.")
+}
+
+# --- Install Cosmo's packages into the Python found above ---
+& $PythonExe -m pip install -r (Join-Path $ScriptDir "requirements.txt")
+if ($LASTEXITCODE -ne 0) { throw "Package install failed - see the messages above." }
+
 
 # --- Write a cosmo.cmd launcher next to app.py ---
 # .cmd files aren't blocked by execution policy (profiles are), and work in
