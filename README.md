@@ -84,8 +84,18 @@ installs the Python packages, and sets up the `cosmo` command.
 <details>
 <summary><b>macOS / Linux</b></summary>
 
+Open Terminal. Cosmo will be saved in whichever folder Terminal is open in, which is your home folder by default.
+
+To save it somewhere else, first type `cd` followed by the folder you want and press Enter. For example:
+
 ```bash
-curl -L https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -o cosmo.zip && unzip cosmo.zip && rm cosmo.zip && cd Cosmo-ArXiv-Filter-main && python3 -m pip install -r requirements.txt && chmod +x install.sh && ./install.sh
+cd ~/Projects
+```
+
+Then paste this and press Enter:
+
+```bash
+curl -L https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip ...
 ```
 
 `install.sh` adds a `cosmo` alias to your shell profile (`~/.zshrc` or
@@ -105,8 +115,18 @@ outside those three folders (e.g. your home folder) avoids this step entirely.
 <details>
 <summary><b>Windows (PowerShell)</b></summary>
 
+Open PowerShell from the Start menu (normally, not "Run as administrator"). Cosmo will be saved in whichever folder PowerShell is open in, which is your user folder (`C:\Users\YourName`) by default.
+
+To save it somewhere else, first type `cd` followed by the folder you want and press Enter. For example, to use a Projects folder inside your user folder:
+
 ```powershell
-$ProgressPreference='SilentlyContinue'; Invoke-WebRequest -Uri https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -OutFile cosmo.zip; Expand-Archive cosmo.zip -DestinationPath . -Force; Remove-Item cosmo.zip; cd Cosmo-ArXiv-Filter-main; python -m pip install -r requirements.txt; powershell -ExecutionPolicy Bypass -File .\install.ps1
+cd $HOME\Projects
+```
+
+Then paste this and press Enter:
+
+```powershell
+$ProgressPreference='SilentlyContinue'; Invoke-WebRequest ...
 ```
 
 `install.ps1` creates a small `cosmo.cmd` launcher in the Cosmo folder and adds
