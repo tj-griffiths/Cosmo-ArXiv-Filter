@@ -257,12 +257,18 @@ def maybe_send_daily_email(papers: list[dict]) -> None:
     remaining_slots = max(0, email_count - len(guaranteed))
     top_papers = guaranteed + remaining[:remaining_slots]
 
-    sent = send_digest_email(prefs["email"], top_papers, preferred_ids=guaranteed_ids, preferred_keywords= keywords)
-    prefs["last_email_sent_date"] = date.today().isoformat()
-    save_preferences(prefs)
+    print(f"Email pool: {len(papers)} papers in, {len(embeddings_by_id)} embeddings loaded, "
+          f"{len(scored_all)} scored, {len(unlabeled_scored)} unlabeled, "
+          f"{len(guaranteed)} guaranteed, {len(top_papers)} selected (target {email_count}).")
 
+    sent = send_digest_email(prefs["email"], top_papers, preferred_ids=guaranteed_ids, preferred_keywords=keywords)
     if sent:
+        prefs["last_email_sent_date"] = date.today().isoformat()
+        save_preferences(prefs)
+        print("Daily email sent.")
         notify_desktop("Cosmo", f"Sent today's {len(top_papers)} picks to {prefs['email']}.")
+    else:
+        print("Email not sent - will retry next run.")
     
 MAX_FETCH_RETRIES = 10
 FETCH_RETRY_DELAY_SECONDS = 30
