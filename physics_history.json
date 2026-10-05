@@ -1,33 +1,381 @@
 {
-    "01-07": [{"year": 1610, "event": "Galileo Galilei discovered the four largest moons of Jupiter, the first moons found orbiting a planet other than Earth."}],
-    "01-16": [{"year": 1969, "event": "Soyuz 4 and Soyuz 5 performed the first docking of two crewed spacecraft in orbit."}],
-    "01-27": [{"year": 1967, "event": "The Outer Space Treaty, the foundational framework of international space law, was opened for signature."}],
-    "02-03": [{"year": 1966, "event": "The Soviet Luna 9 probe achieved the first successful soft landing on the Moon."}],
-    "02-11": [{"year": 2016, "event": "The LIGO collaboration announced the first direct detection of gravitational waves, from two colliding black holes."}],
-    "02-15": [{"year": 2013, "event": "The Chelyabinsk meteor exploded over Russia, the largest airburst since the 1908 Tunguska event."}],
-    "02-18": [{"year": 1930, "event": "Clyde Tombaugh discovered Pluto at Lowell Observatory."}],
-    "02-20": [{"year": 1962, "event": "John Glenn became the first American to orbit the Earth, aboard Friendship 7."}],
-    "02-29": [{"year": 2004, "event": "The Mars rovers Spirit and Opportunity, having landed weeks earlier, continued surface operations on this rare leap day, part of a mission that would return unprecedented surface data from Mars."}],
-    "03-06": [{"year": 2009, "event": "NASA launched the Kepler space telescope to search for exoplanets."}],
-    "03-14": [{"year": 1879, "event": "Albert Einstein was born in Ulm, Germany."}],
-    "04-12": [{"year": 1961, "event": "Yuri Gagarin became the first human to travel into space, aboard Vostok 1."}],
-    "04-24": [{"year": 1990, "event": "The Hubble Space Telescope was launched aboard the Space Shuttle Discovery."}],
-    "05-14": [{"year": 1973, "event": "The United States launched Skylab, its first space station."}],
-    "05-25": [{"year": 1961, "event": "President Kennedy announced the goal of landing a man on the Moon before the end of the decade."}],
-    "05-29": [{"year": 1919, "event": "Arthur Eddington's solar eclipse expedition measured starlight bending around the Sun, providing early observational support for general relativity."}],
-    "06-19": [{"year": 1961, "event": "The Soviet Union carried out an early orbital rendezvous test as part of the Vostok program."}],
-    "07-04": [{"year": 2012, "event": "CERN announced the discovery of a particle consistent with the Higgs boson, using data from the ATLAS and CMS experiments."}],
-    "07-14": [{"year": 2015, "event": "NASA's New Horizons spacecraft performed its closest flyby of Pluto, returning the first detailed images of the dwarf planet."}],
-    "07-16": [{"year": 1945, "event": "The Trinity test in New Mexico became the first detonation of a nuclear weapon."}],
-    "07-20": [{"year": 1969, "event": "Apollo 11 astronauts Neil Armstrong and Buzz Aldrin became the first humans to walk on the Moon."}],
-    "08-06": [{"year": 2012, "event": "NASA's Curiosity rover landed on Mars."}],
-    "08-25": [{"year": 1989, "event": "Voyager 2 made its closest approach to Neptune, the only spacecraft to have visited the planet."}],
-    "09-26": [{"year": 1983, "event": "Soviet officer Stanislav Petrov judged a satellite warning of incoming nuclear missiles to be a false alarm, a decision credited with averting potential nuclear war."}],
-    "10-04": [{"year": 1957, "event": "The Soviet Union launched Sputnik 1, the first artificial satellite to orbit Earth."}],
-    "11-25": [{"year": 1915, "event": "Albert Einstein presented the final field equations of general relativity to the Prussian Academy of Sciences."}],
-    "12-02": [{"year": 1942, "event": "The first self-sustaining nuclear chain reaction was achieved at Chicago Pile-1, part of the Manhattan Project."}],
-    "12-14": [{"year": 1900, "event": "Max Planck presented his quantum hypothesis to the German Physical Society, often marking the birth of quantum theory."}],
-    "12-28": [{"year": 1895, "event": "Wilhelm Röntgen submitted his paper announcing the discovery of X-rays."}],
-    "02-02": [{"year": 1925, "event": "Patrick Blackett published the first experimental results of nuclear transmutation, bombarding a nitrogen nucleus with an alpha particle to produce oxygen-17 and a proton, at the Cavendish Laboratory."}],
-    "02-27": [{"year": 1932, "event": "James Chadwick published his discovery of the neutron, identifying it as the mysterious 'beryllium radiation' previously observed by Irène and Frédéric Joliot-Curie."}]
-  }
+  "01-01": [
+      {"year": 1801, "event": "Giuseppe Piazzi discovered Ceres, the first asteroid found and now classed as a dwarf planet."},
+      {"year": 1925, "event": "Edwin Hubble's measurements of Cepheid variables in the Andromeda 'nebula' were presented to the American Astronomical Society, showing it to be a separate galaxy far beyond the Milky Way."},
+      {"year": 2016, "event": "Fabiola Gianotti, who had presented ATLAS's Higgs discovery results in 2012, took office as the first woman Director-General of CERN."}
+    ],
+  "01-02": [{"year": 1928, "event": "Paul Dirac's paper introducing his relativistic equation for the electron was received by the Royal Society. It predicted antimatter four years before the positron was found."}],
+  "01-06": [{"year": 1912, "event": "Alfred Wegener first presented his theory of continental drift, at a meeting of the Geological Association in Frankfurt."}],
+  "01-07": [{"year": 1610, "event": "Galileo Galilei first observed moons orbiting Jupiter, spotting three that night and the fourth within days, the first moons found orbiting a planet other than Earth."}],
+  "01-08": [
+      {"year": 1938, "event": "Pyotr Kapitsa and, separately, John Allen and Don Misener published the discovery of superfluidity in liquid helium in the same issue of Nature."},
+      {"year": 1942, "event": "Stephen Hawking was born in Oxford, England."}
+    ],
+  "01-09": [{"year": 1992, "event": "Aleksander Wolszczan and Dale Frail published the discovery of planets orbiting the pulsar PSR B1257+12, the first confirmed planets beyond the Solar System."}],
+  "01-14": [{"year": 2005, "event": "The Huygens probe landed on Saturn's moon Titan, the most distant landing ever made on another world."}],
+  "01-15": [
+      {"year": 1850, "event": "Sofia Kovalevskaya was born in Moscow. She made major contributions to analysis and the mechanics of rotating bodies, and became the first woman to hold a full professorship in mathematics in Northern Europe."},
+      {"year": 1934, "event": "Irène and Frédéric Joliot-Curie announced the discovery of artificial radioactivity, created by bombarding aluminium with alpha particles."},
+      {"year": 1957, "event": "Columbia University announced Chien-Shiung Wu's experiment showing that parity is not conserved in weak interactions, overturning a fundamental assumed symmetry of nature."},
+      {"year": 1996, "event": "The Hubble Deep Field was released, revealing around 3,000 galaxies in a patch of sky smaller than a grain of sand held at arm's length."}
+    ],
+  "01-16": [{"year": 1969, "event": "Soyuz 4 and Soyuz 5 performed the first docking of two crewed spacecraft in orbit."}],
+  "01-23": [{"year": 1862, "event": "David Hilbert was born in Königsberg, Prussia."}],
+  "01-25": [
+      {"year": 1736, "event": "Joseph-Louis Lagrange was born in Turin. His reformulation of mechanics is the starting point for modern theoretical physics."},
+      {"year": 1983, "event": "CERN announced the discovery of the W boson, a carrier of the weak force, from events recorded by the UA1 and UA2 experiments."}
+    ],
+  "01-27": [
+      {"year": 1926, "event": "Erwin Schrödinger's first paper on wave mechanics, introducing his wave equation, was received by Annalen der Physik."},
+      {"year": 1967, "event": "The Outer Space Treaty, the foundational framework of international space law, was opened for signature."}
+    ],
+  "01-31": [{"year": 1958, "event": "Explorer 1, the first US satellite, was launched. Its instruments led to the discovery of the Van Allen radiation belts."}],
+  "02-02": [{"year": 1925, "event": "Patrick Blackett's paper on cloud-chamber photographs of alpha particles striking nitrogen was submitted, giving the first visual record of a nuclear transmutation (nitrogen-14 into oxygen-17), six years after Rutherford first detected the reaction."}],
+  "02-03": [
+      {"year": 1851, "event": "Léon Foucault first publicly demonstrated his pendulum at the Paris Observatory, giving direct visual proof of Earth's rotation."},
+      {"year": 1966, "event": "The Soviet Luna 9 probe achieved the first successful soft landing on the Moon."}
+    ],
+  "02-05": [{"year": 1980, "event": "Klaus von Klitzing discovered the quantum Hall effect, in which Hall resistance is quantised in units set only by fundamental constants."}],
+  "02-09": [{"year": 2022, "event": "The JET tokamak in England announced a record 59 megajoules of sustained fusion energy over five seconds."}],
+  "02-11": [
+      {"year": 1839, "event": "Josiah Willard Gibbs was born in New Haven, Connecticut. He founded much of modern thermodynamics and statistical mechanics."},
+      {"year": 1939, "event": "Lise Meitner and Otto Frisch published their explanation of nuclear fission in Nature, coining the term and calculating the enormous energy released."},
+      {"year": 2016, "event": "The LIGO collaboration announced the first direct detection of gravitational waves, from two colliding black holes."}
+    ],
+  "02-14": [
+      {"year": 1946, "event": "ENIAC, one of the first general-purpose electronic computers, was unveiled at the University of Pennsylvania. Its early jobs included calculations for nuclear weapons research."},
+      {"year": 1990, "event": "Voyager 1 took the 'Pale Blue Dot' photograph of Earth from about 6 billion kilometres away."}
+    ],
+  "02-15": [
+      {"year": 1564, "event": "Galileo Galilei was born in Pisa, Italy."},
+      {"year": 2013, "event": "The Chelyabinsk meteor exploded over Russia, the largest airburst since the 1908 Tunguska event."}
+    ],
+  "02-18": [{"year": 1930, "event": "Clyde Tombaugh discovered Pluto at Lowell Observatory."}],
+  "02-19": [{"year": 1473, "event": "Nicolaus Copernicus was born in Toruń, Poland."}],
+  "02-20": [
+      {"year": 1844, "event": "Ludwig Boltzmann was born in Vienna. His statistical interpretation of entropy founded statistical mechanics."},
+      {"year": 1962, "event": "John Glenn became the first American to orbit the Earth, aboard Friendship 7."}
+    ],
+  "02-22": [{"year": 2017, "event": "NASA announced seven Earth-sized planets orbiting the nearby star TRAPPIST-1, three of them in the habitable zone."}],
+  "02-24": [{"year": 1987, "event": "Supernova 1987A was discovered in the Large Magellanic Cloud, the closest observed supernova since 1604. Its neutrinos, detected hours before the light, opened the field of neutrino astronomy."}],
+  "02-27": [{"year": 1932, "event": "James Chadwick published his discovery of the neutron, explaining the penetrating radiation from beryllium first seen by Bothe and Becker and studied by Irène and Frédéric Joliot-Curie."}],
+  "02-28": [{"year": 1928, "event": "C. V. Raman discovered the inelastic scattering of light now called the Raman effect. India celebrates the date as National Science Day."}],
+  "03-02": [
+      {"year": 1896, "event": "Henri Becquerel reported that uranium salts emit penetrating rays without any light exposure, the discovery of radioactivity."},
+      {"year": 1995, "event": "Fermilab's CDF and D0 experiments jointly announced the discovery of the top quark, the heaviest known elementary particle and the last quark to be found."}
+    ],
+  "03-03": [{"year": 1912, "event": "Henrietta Leavitt's period-luminosity relation for Cepheid variables was published, giving astronomers their first standard candle for measuring distances to other galaxies."}],
+  "03-06": [
+      {"year": 1787, "event": "Joseph von Fraunhofer was born in Straubing, Bavaria. He mapped the dark absorption lines in the Sun's spectrum that founded astronomical spectroscopy."},
+      {"year": 2009, "event": "NASA launched the Kepler space telescope to search for exoplanets."}
+    ],
+  "03-12": [{"year": 1989, "event": "Tim Berners-Lee submitted his proposal for an information management system at CERN, the origin of the World Wide Web."}],
+  "03-13": [{"year": 1781, "event": "William Herschel discovered Uranus, the first planet found with a telescope."}],
+  "03-14": [
+      {"year": 1879, "event": "Albert Einstein was born in Ulm, Germany."},
+      {"year": 2018, "event": "Stephen Hawking died in Cambridge, on the anniversary of Einstein's birth."}
+    ],
+  "03-16": [
+      {"year": 1750, "event": "Caroline Herschel was born in Hanover. She went on to discover eight comets and became the first woman paid as a scientist in Britain."},
+      {"year": 1963, "event": "Maarten Schmidt published the redshift of 3C 273, revealing quasars as extremely luminous objects billions of light-years away."}
+    ],
+  "03-18": [{"year": 1905, "event": "Albert Einstein's paper explaining the photoelectric effect with light quanta was received by Annalen der Physik, the work later cited for his Nobel Prize."}],
+  "03-21": [
+      {"year": 1768, "event": "Joseph Fourier was born in Auxerre, France. His series and transforms, developed to study heat flow, are used across all of physics."},
+      {"year": 2013, "event": "The Planck satellite released its first full-sky map of the cosmic microwave background, refining the age of the universe to about 13.8 billion years."}
+    ],
+  "03-23": [
+      {"year": 1882, "event": "Emmy Noether was born in Erlangen, Germany. Her theorem linking symmetries to conservation laws underpins modern physics."},
+      {"year": 1927, "event": "Werner Heisenberg's paper introducing the uncertainty principle was received by Zeitschrift für Physik."}
+    ],
+  "03-25": [{"year": 1655, "event": "Christiaan Huygens discovered Titan, Saturn's largest moon."}],
+  "03-30": [{"year": 2010, "event": "The Large Hadron Collider recorded its first proton collisions at 7 TeV, a world record energy at the time."}],
+  "04-08": [{"year": 1911, "event": "Heike Kamerlingh Onnes's lab observed the electrical resistance of mercury vanish below about 4 kelvin, the discovery of superconductivity."}],
+  "04-10": [{"year": 2019, "event": "The Event Horizon Telescope released the first image of a black hole's shadow, at the centre of galaxy M87."}],
+  "04-12": [{"year": 1961, "event": "Yuri Gagarin became the first human to travel into space, aboard Vostok 1."}],
+  "04-14": [
+    {"year": 1629, "event": "Christiaan Huygens was born in The Hague. His wave theory of light explained reflection and refraction."},
+    {"year": 1932, "event": "John Cockcroft and Ernest Walton split lithium nuclei with artificially accelerated protons at the Cavendish Laboratory, the first fully artificial nuclear reaction."}
+  ],
+  "04-15": [{"year": 1707, "event": "Leonhard Euler was born in Basel, Switzerland."}],
+  "04-18": [{"year": 2018, "event": "NASA launched TESS, the Transiting Exoplanet Survey Satellite, to search the nearest and brightest stars for planets."}],
+  "04-21": [{"year": 1820, "event": "Hans Christian Ørsted noticed an electric current deflecting a compass needle during a lecture, the first evidence linking electricity and magnetism."}],
+  "04-23": [
+      {"year": 1858, "event": "Max Planck was born in Kiel, Germany."},
+      {"year": 1992, "event": "The COBE team announced the detection of tiny temperature fluctuations in the cosmic microwave background, the seeds of all later cosmic structure."}
+    ],
+  "04-24": [{"year": 1990, "event": "The Hubble Space Telescope was launched aboard the Space Shuttle Discovery."}],
+  "04-25": [
+      {"year": 1900, "event": "Wolfgang Pauli was born in Vienna. His exclusion principle explains the structure of the periodic table."},
+      {"year": 1953, "event": "Watson and Crick's paper proposing the double-helix structure of DNA was published in Nature, alongside papers by Rosalind Franklin and Maurice Wilkins whose X-ray data underpinned it."}
+    ],
+  "04-26": [
+      {"year": 1920, "event": "Harlow Shapley and Heber Curtis held the 'Great Debate' over the size of the Milky Way and whether spiral nebulae are separate galaxies."},
+      {"year": 1986, "event": "Reactor 4 at the Chernobyl Nuclear Power Plant exploded, the worst nuclear power accident in history."}
+    ],
+  "04-29": [{"year": 1854, "event": "Henri Poincaré was born in Nancy, France. His work on the three-body problem laid the foundations of chaos theory."}],
+  "04-30": [
+      {"year": 1777, "event": "Carl Friedrich Gauss was born in Brunswick, Germany."},
+      {"year": 1897, "event": "J. J. Thomson announced at the Royal Institution that cathode rays are made of particles far smaller than atoms, the discovery of the electron."},
+      {"year": 1993, "event": "CERN released the World Wide Web software into the public domain, allowing anyone to use and build on it for free."}
+    ],
+  "05-10": [
+      {"year": 1788, "event": "Augustin-Jean Fresnel was born in Broglie, France. His work on diffraction established the wave theory of light."},
+      {"year": 1900, "event": "Cecilia Payne-Gaposchkin was born in Wendover, England. Her 1925 thesis showed that stars are made overwhelmingly of hydrogen and helium."}
+    ],
+  "05-11": [
+      {"year": 1905, "event": "Albert Einstein's paper on Brownian motion was received by Annalen der Physik, giving decisive evidence for the existence of atoms."},
+      {"year": 1918, "event": "Richard Feynman was born in New York City."}
+    ],
+  "05-12": [{"year": 2022, "event": "The Event Horizon Telescope released the first image of Sagittarius A*, the black hole at the centre of the Milky Way."}],
+  "05-13": [{"year": 1888, "event": "Inge Lehmann was born in Copenhagen. She discovered from seismic waves that Earth has a solid inner core."}],
+  "05-14": [{"year": 1973, "event": "The United States launched Skylab, its first space station."}],
+  "05-15": [{"year": 1935, "event": "Einstein, Podolsky and Rosen published their paper questioning whether quantum mechanics is complete, the origin of the debate over entanglement."}],
+  "05-16": [
+      {"year": 1960, "event": "Theodore Maiman operated the first working laser, using a ruby crystal, at Hughes Research Laboratories."},
+      {"year": 1985, "event": "Joseph Farman, Brian Gardiner and Jonathan Shanklin published the discovery of the Antarctic ozone hole in Nature."}
+    ],
+  "05-17": [{"year": 1861, "event": "James Clerk Maxwell demonstrated the first colour photograph, of a tartan ribbon, at the Royal Institution, using his three-colour method."}],
+  "05-20": [{"year": 2019, "event": "The redefined SI took effect, with the kilogram, ampere, kelvin and mole defined by fixed values of fundamental constants instead of physical artefacts."}],
+  "05-25": [
+      {"year": 1842, "event": "Christian Doppler presented his paper on how the observed frequency of a wave depends on the motion of its source, the Doppler effect."},
+      {"year": 1961, "event": "President Kennedy announced the goal of landing a man on the Moon before the end of the decade."}
+    ],
+  "05-29": [
+      {"year": 1919, "event": "Arthur Eddington's solar eclipse expedition measured starlight bending around the Sun, providing early observational support for general relativity."},
+      {"year": 1929, "event": "Peter Higgs was born in Newcastle upon Tyne, England."}
+    ],
+  "05-30": [{"year": 1908, "event": "Hannes Alfvén was born in Norrköping, Sweden. He founded magnetohydrodynamics and much of modern plasma physics."}],
+  "05-31": [{"year": 1912, "event": "Chien-Shiung Wu was born in Liuhe, China. She became one of the foremost experimental physicists of the 20th century."}],
+  "06-01": [
+      {"year": 1796, "event": "Sadi Carnot was born in Paris. His analysis of heat engines founded thermodynamics."},
+      {"year": 1983, "event": "CERN announced the discovery of the Z boson, the neutral carrier of the weak force, completing the electroweak picture."}
+    ],
+  "06-04": [{"year": 1924, "event": "Satyendra Nath Bose wrote to Einstein enclosing his derivation of Planck's law, the foundation of Bose-Einstein statistics."}],
+  "06-05": [{"year": 1995, "event": "Eric Cornell and Carl Wieman created the first Bose-Einstein condensate, in rubidium atoms cooled to 170 nanokelvin at JILA."}],
+  "06-10": [{"year": 1854, "event": "Bernhard Riemann gave his habilitation lecture on the foundations of geometry, introducing the curved-space mathematics Einstein later used for general relativity."}],
+  "06-13": [
+      {"year": 1773, "event": "Thomas Young was born in Milverton, England. His double-slit experiment demonstrated the wave nature of light."},
+      {"year": 1831, "event": "James Clerk Maxwell was born in Edinburgh, Scotland."}
+    ],
+  "06-14": [{"year": 1956, "event": "Clyde Cowan and Frederick Reines telegrammed Wolfgang Pauli that they had detected the neutrino, 26 years after he proposed it."}],
+  "06-16": [{"year": 1963, "event": "Valentina Tereshkova became the first woman in space, aboard Vostok 6."}],
+  "06-18": [{"year": 1983, "event": "Sally Ride became the first American woman in space, aboard the Space Shuttle Challenger. She held a PhD in physics from Stanford."}],
+  "06-22": [{"year": 1633, "event": "Galileo Galilei was convicted by the Roman Inquisition for advocating heliocentrism and forced to recant."}],
+  "06-23": [
+      {"year": 1912, "event": "Alan Turing was born in London."},
+      {"year": 2025, "event": "The Vera C. Rubin Observatory released its first images, beginning a decade-long survey of the southern sky."}
+    ],
+  "06-25": [{"year": 1983, "event": "The Joint European Torus (JET) produced its first plasma, beginning 40 years as the world's largest operating tokamak."}],
+  "06-26": [
+      {"year": 1824, "event": "William Thomson, later Lord Kelvin, was born in Belfast. He established the absolute temperature scale that bears his name."},
+      {"year": 1914, "event": "Lyman Spitzer was born in Toledo, Ohio. He invented the stellarator for fusion research and first proposed a space telescope."}
+    ],
+  "06-27": [{"year": 1954, "event": "The Obninsk Nuclear Power Plant in the Soviet Union became the first nuclear reactor to supply electricity to a power grid."}],
+  "06-28": [{"year": 1906, "event": "Maria Goeppert Mayer was born in Kattowitz, Germany. Her nuclear shell model made her the second woman to win the Nobel Prize in Physics."}],
+  "06-30": [
+      {"year": 1905, "event": "Albert Einstein's paper on special relativity, 'On the Electrodynamics of Moving Bodies', was received by Annalen der Physik."},
+      {"year": 1908, "event": "The Tunguska event flattened about 2,000 square kilometres of Siberian forest, the largest impact event in recorded history."}
+    ],
+  "07-01": [
+      {"year": 1968, "event": "The Treaty on the Non-Proliferation of Nuclear Weapons was opened for signature."},
+      {"year": 2025, "event": "The ATLAS survey discovered 3I/ATLAS, only the third known interstellar object to pass through the Solar System."}
+    ],
+  "07-02": [{"year": 1967, "event": "The US Vela satellites, built to detect nuclear tests, recorded the first gamma-ray burst. The discovery stayed classified until 1973."}],
+  "07-03": [{"year": 1977, "event": "Raymond Damadian's team made the first MRI scan of a human body, taking nearly five hours to produce a single image."}],
+  "07-04": [
+    {"year": 1054, "event": "Chinese astronomers recorded a 'guest star' bright enough to see in daylight, the supernova that created the Crab Nebula."},
+    {"year": 1868, "event": "Henrietta Leavitt was born in Lancaster, Massachusetts."},
+    {"year": 1934, "event": "Marie Curie died in France, the only person to win Nobel Prizes in two different sciences."},
+    {"year": 2012, "event": "CERN announced the discovery of a particle consistent with the Higgs boson, using data from the ATLAS and CMS experiments, nearly 50 years after it was predicted."}
+  ],
+  "07-05": [{"year": 1687, "event": "Isaac Newton's Principia Mathematica was published, setting out his laws of motion and universal gravitation."}],
+  "07-07": [{"year": 1957, "event": "The first Pugwash Conference on Science and World Affairs convened in Nova Scotia, bringing scientists from both sides of the Cold War together on nuclear risk."}],
+  "07-09": [{"year": 1955, "event": "The Russell-Einstein Manifesto was issued in London, warning of the dangers of nuclear weapons. Einstein signed it days before his death."}],
+  "07-10": [{"year": 1908, "event": "Heike Kamerlingh Onnes liquefied helium for the first time, reaching about 4 kelvin."}],
+  "07-12": [{"year": 2022, "event": "The James Webb Space Telescope released its first full-colour science images."}],
+  "07-14": [
+      {"year": 2015, "event": "NASA's New Horizons spacecraft performed its closest flyby of Pluto, returning the first detailed images of the dwarf planet."},
+      {"year": 2015, "event": "CERN's LHCb experiment announced the discovery of pentaquarks, exotic particles made of five quarks."}
+    ],
+  "07-15": [
+      {"year": 1943, "event": "Jocelyn Bell Burnell was born in Lurgan, Northern Ireland."},
+      {"year": 1965, "event": "Mariner 4 made the first successful flyby of Mars, returning the first close-up images of another planet."}
+    ],
+  "07-16": [
+      {"year": 1945, "event": "The Trinity test in New Mexico became the first detonation of a nuclear weapon."},
+      {"year": 1994, "event": "The first fragment of comet Shoemaker-Levy 9 struck Jupiter, the first collision of two Solar System bodies ever observed."}
+    ],
+  "07-18": [{"year": 1898, "event": "Marie and Pierre Curie announced the discovery of polonium, named after Marie's native Poland."}],
+  "07-19": [{"year": 1973, "event": "CERN's Gargamelle bubble chamber collaboration presented the first evidence of weak neutral currents, a key prediction of electroweak theory."}],
+  "07-20": [
+      {"year": 1969, "event": "Apollo 11 astronauts Neil Armstrong and Buzz Aldrin became the first humans to walk on the Moon."},
+      {"year": 1976, "event": "Viking 1 became the first spacecraft to land successfully on Mars and carry out its mission."}
+    ],
+  "07-21": [{"year": 2000, "event": "Fermilab's DONUT experiment announced the first direct observation of the tau neutrino, the last Standard Model lepton to be detected."}],
+  "07-23": [
+    {"year": 1918, "event": "Felix Klein presented Emmy Noether's paper containing her theorem, linking every continuous symmetry to a conservation law, to the Göttingen Mathematical Society."},
+    {"year": 1928, "event": "Vera Rubin was born in Philadelphia. Her galaxy rotation curves became key evidence for dark matter."},
+    {"year": 1999, "event": "NASA's Chandra X-ray Observatory was launched aboard the Space Shuttle Columbia."}
+  ],
+  "07-25": [{"year": 1920, "event": "Rosalind Franklin was born in London. Her X-ray diffraction images were key to determining the structure of DNA."}],
+  "07-29": [{"year": 1925, "event": "Werner Heisenberg's paper laying the foundations of matrix mechanics, written after a stay on the island of Helgoland, was received by Zeitschrift für Physik."}],
+  "08-01": [{"year": 1786, "event": "Caroline Herschel discovered her first comet, becoming the first woman credited with discovering one."}],
+  "08-02": [
+      {"year": 1932, "event": "Carl Anderson took the cloud-chamber photograph of a positively charged electron, the positron, the first antimatter particle observed."},
+      {"year": 1939, "event": "Albert Einstein signed a letter drafted with Leo Szilard warning President Roosevelt that Germany might develop atomic bombs, prompting US nuclear research."}
+    ],
+  "08-05": [
+      {"year": 1963, "event": "The Partial Nuclear Test Ban Treaty was signed in Moscow, banning nuclear tests in the atmosphere, in space and underwater."},
+      {"year": 1977, "event": "Fermilab publicly announced the Upsilon particle, discovered by Leon Lederman's E288 team, the first evidence of the bottom quark."}
+    ],
+  "08-06": [
+      {"year": 1945, "event": "An atomic bomb was dropped on Hiroshima, Japan, the first use of a nuclear weapon in war."},
+      {"year": 2012, "event": "NASA's Curiosity rover landed on Mars."}
+    ],
+  "08-08": [
+      {"year": 1900, "event": "David Hilbert presented his famous list of unsolved problems at the International Congress of Mathematicians in Paris. His sixth problem called for an axiomatisation of physics."},
+      {"year": 1902, "event": "Paul Dirac was born in Bristol, England."},
+      {"year": 1931, "event": "Roger Penrose was born in Colchester, England."}
+    ],
+  "08-12": [
+      {"year": 1887, "event": "Erwin Schrödinger was born in Vienna."},
+      {"year": 2018, "event": "NASA launched the Parker Solar Probe to fly through the Sun's outer atmosphere."}
+    ],
+  "08-17": [{"year": 2017, "event": "LIGO and Virgo detected gravitational waves from two merging neutron stars, also seen across the electromagnetic spectrum, the birth of multi-messenger astronomy."}],
+  "08-18": [{"year": 1868, "event": "During a solar eclipse, Jules Janssen observed an unknown yellow spectral line from the Sun, later identified as a new element, helium."}],
+  "08-20": [{"year": 1977, "event": "Voyager 2 was launched, beginning a tour of all four giant planets."}],
+  "08-24": [
+      {"year": 2006, "event": "The International Astronomical Union reclassified Pluto as a dwarf planet."},
+      {"year": 2016, "event": "Astronomers announced Proxima b, a planet orbiting in the habitable zone of the nearest star to the Sun."}
+    ],
+  "08-25": [
+      {"year": 1989, "event": "Voyager 2 made its closest approach to Neptune, the only spacecraft to have visited the planet."},
+      {"year": 2012, "event": "Voyager 1 crossed the heliopause, becoming the first human-made object to enter interstellar space."}
+    ],
+  "08-26": [
+      {"year": 1918, "event": "Katherine Johnson was born in White Sulphur Springs, West Virginia. Her orbital calculations were essential to early NASA crewed flights."},
+      {"year": 1951, "event": "Edward Witten was born in Baltimore. He is the only physicist to have won the Fields Medal."}
+    ],
+  "08-29": [{"year": 1831, "event": "Michael Faraday discovered electromagnetic induction, the principle behind every electric generator and transformer."}],
+  "08-30": [{"year": 1871, "event": "Ernest Rutherford was born in Brightwater, New Zealand."}],
+  "09-01": [{"year": 1859, "event": "Richard Carrington observed a solar flare that triggered the most intense geomagnetic storm on record, the Carrington Event."}],
+  "09-05": [{"year": 1977, "event": "Voyager 1 was launched. It is now the most distant human-made object."}],
+  "09-06": [{"year": 2018, "event": "Jocelyn Bell Burnell won the Breakthrough Prize for her discovery of pulsars, and donated the $3 million to fund physics PhDs for under-represented students."}],
+  "09-10": [{"year": 2008, "event": "The first proton beam circulated around the Large Hadron Collider at CERN."}],
+  "09-14": [{"year": 2015, "event": "LIGO detected gravitational waves for the first time, from two black holes merging 1.3 billion light-years away. The detection was announced the following February."}],
+  "09-15": [{"year": 2017, "event": "The Cassini spacecraft ended its 13-year mission at Saturn with a deliberate plunge into the planet's atmosphere."}],
+  "09-16": [{"year": 1987, "event": "The Montreal Protocol was signed to phase out ozone-depleting chemicals. It became the first treaty ratified by every country in the world."}],
+  "09-22": [
+      {"year": 1791, "event": "Michael Faraday was born in Newington Butts, London."},
+      {"year": 2017, "event": "IceCube detected a high-energy neutrino later traced to the blazar TXS 0506+056, the first identified source of high-energy cosmic neutrinos."}
+    ],
+  "09-23": [{"year": 1846, "event": "Johann Galle observed Neptune for the first time, within a degree of where Urbain Le Verrier had predicted it from irregularities in Uranus's orbit."}],
+  "09-26": [{"year": 1983, "event": "Soviet officer Stanislav Petrov judged a satellite warning of incoming nuclear missiles to be a false alarm, a decision credited with averting potential nuclear war."}],
+  "09-27": [{"year": 1905, "event": "Albert Einstein's paper showing that a body's mass depends on its energy content, the origin of E = mc², was received by Annalen der Physik."}],
+  "09-29": [
+      {"year": 1901, "event": "Enrico Fermi was born in Rome, Italy."},
+      {"year": 1954, "event": "CERN was officially founded, as its convention came into force."}
+    ],
+    "10-01": [{"year": 1971, "event": "The first CT scan of a patient was performed at Atkinson Morley Hospital in London, using Godfrey Hounsfield's scanner."}],
+  "10-02": [{"year": 2018, "event": "Donna Strickland shared the Nobel Prize in Physics for chirped pulse amplification of laser light, the third woman ever to win it."}],
+  "10-03": [
+      {"year": 2017, "event": "Rainer Weiss, Barry Barish and Kip Thorne were awarded the Nobel Prize in Physics for the detection of gravitational waves by LIGO."},
+      {"year": 2023, "event": "Anne L'Huillier, Pierre Agostini and Ferenc Krausz were awarded the Nobel Prize in Physics for attosecond pulses of light, making L'Huillier the fifth woman to win it."}
+    ],
+  "10-04": [
+      {"year": 1957, "event": "The Soviet Union launched Sputnik 1, the first artificial satellite to orbit Earth."},
+      {"year": 2011, "event": "Saul Perlmutter, Brian Schmidt and Adam Riess were awarded the Nobel Prize in Physics for discovering the accelerating expansion of the universe."},
+      {"year": 2022, "event": "Alain Aspect, John Clauser and Anton Zeilinger were awarded the Nobel Prize in Physics for experiments with entangled photons."}
+    ],
+  "10-05": [{"year": 2021, "event": "Syukuro Manabe, Klaus Hasselmann and Giorgio Parisi were awarded the Nobel Prize in Physics for climate modelling and for the physics of complex disordered systems."}],
+  "10-06": [
+      {"year": 1995, "event": "Michel Mayor and Didier Queloz announced 51 Pegasi b, the first exoplanet found orbiting a Sun-like star."},
+      {"year": 2009, "event": "Charles Kao, Willard Boyle and George Smith were awarded the Nobel Prize in Physics for optical fibre communication and the CCD image sensor."},
+      {"year": 2015, "event": "Takaaki Kajita and Arthur McDonald were awarded the Nobel Prize in Physics for discovering neutrino oscillations, showing neutrinos have mass."},
+      {"year": 2020, "event": "Andrea Ghez shared the Nobel Prize in Physics for discovering the supermassive black hole at the centre of the Milky Way, the fourth woman to win it."}
+    ],
+  "10-07": [{"year": 1885, "event": "Niels Bohr was born in Copenhagen, Denmark."}],
+  "10-08": [{"year": 2013, "event": "François Englert and Peter Higgs were awarded the Nobel Prize in Physics for the mechanism that gives elementary particles mass."}],
+  "10-09": [
+      {"year": 1604, "event": "A new star was first sighted in Ophiuchus. Johannes Kepler's detailed study of it made it known as Kepler's Supernova, the last supernova seen in the Milky Way."},
+      {"year": 2012, "event": "Serge Haroche and David Wineland were awarded the Nobel Prize in Physics for methods to measure and control individual quantum systems, including trapped ions."}
+    ],
+  "10-16": [{"year": 1843, "event": "William Rowan Hamilton discovered quaternions while walking along a canal in Dublin, and carved the formula into Brougham Bridge."}],
+  "10-17": [{"year": 1956, "event": "Calder Hall in England opened as the world's first commercial-scale nuclear power station."}],
+  "10-19": [
+      {"year": 1910, "event": "Subrahmanyan Chandrasekhar was born in Lahore. His mass limit for white dwarfs underpins the theory of stellar death."},
+      {"year": 2017, "event": "The Pan-STARRS telescope discovered 'Oumuamua, the first known interstellar object to pass through the Solar System."}
+    ],
+  "10-22": [
+      {"year": 1934, "event": "Enrico Fermi's group in Rome discovered that slowing neutrons with paraffin wax greatly increases their ability to induce radioactivity, a key step towards nuclear reactors."},
+      {"year": 2004, "event": "Andre Geim and Konstantin Novoselov published the isolation of graphene, a single layer of carbon atoms, using sticky tape."}
+    ],
+  "10-23": [{"year": 2019, "event": "Google published its claim of quantum supremacy, with the Sycamore processor completing in minutes a task estimated to take a classical supercomputer thousands of years."}],
+  "10-24": [{"year": 1927, "event": "The fifth Solvay Conference opened in Brussels, where Einstein and Bohr began their famous debates over quantum mechanics."}],
+  "11-01": [{"year": 1952, "event": "The United States detonated Ivy Mike at Enewetak Atoll, the first full-scale thermonuclear device, roughly 700 times more powerful than the Hiroshima bomb."}],
+    "11-07": [
+      {"year": 1867, "event": "Marie Curie was born in Warsaw, Poland."},
+      {"year": 1878, "event": "Lise Meitner was born in Vienna, sharing a birthday with Marie Curie."},
+      {"year": 1888, "event": "C. V. Raman was born in Tiruchirappalli, India, completing a remarkable trio of physicists born on this date."}
+    ],
+  "11-09": [
+      {"year": 1922, "event": "Albert Einstein was awarded the 1921 Nobel Prize in Physics, for his explanation of the photoelectric effect rather than relativity."},
+      {"year": 1934, "event": "Carl Sagan was born in Brooklyn, New York."}
+    ],
+  "11-11": [
+      {"year": 1572, "event": "Tycho Brahe observed a brilliant new star in Cassiopeia, a supernova whose fixed position helped overturn the idea of an unchanging heavens."},
+      {"year": 1930, "event": "Mildred Dresselhaus was born in Brooklyn. Her work on carbon nanostructures earned her the nickname 'Queen of Carbon Science'."},
+      {"year": 1974, "event": "SLAC and Brookhaven simultaneously announced the J/psi particle, evidence for the charm quark, an event known as the November Revolution."}
+    ],
+  "11-12": [{"year": 2014, "event": "The Philae lander touched down on comet 67P/Churyumov–Gerasimenko, the first landing on a comet."}],
+  "11-16": [{"year": 2018, "event": "The General Conference on Weights and Measures voted to redefine the kilogram in terms of the Planck constant, retiring the platinum-iridium cylinder kept in Paris since 1889."}],
+  "11-18": [{"year": 1989, "event": "NASA launched COBE, the Cosmic Background Explorer."}],
+  "11-20": [
+      {"year": 1889, "event": "Edwin Hubble was born in Marshfield, Missouri."},
+      {"year": 1915, "event": "David Hilbert submitted his own derivation of the field equations of general relativity, five days before Einstein presented his final version."}
+    ],
+  "11-21": [{"year": 2006, "event": "Seven partners, including the EU, US, China and Russia, signed the agreement to build ITER, the international fusion experiment in southern France."}],
+  "11-25": [{"year": 1915, "event": "Albert Einstein presented the final field equations of general relativity to the Prussian Academy of Sciences."}],
+  "11-28": [{"year": 1967, "event": "Jocelyn Bell Burnell recorded the regular pulses of the first known pulsar, at the Mullard Radio Astronomy Observatory in Cambridge."}],
+  "12-02": [
+      {"year": 1942, "event": "The first self-sustaining nuclear chain reaction was achieved at Chicago Pile-1, part of the Manhattan Project."},
+      {"year": 1995, "event": "The Solar and Heliospheric Observatory (SOHO) was launched, and became one of the longest-running solar missions."}
+    ],
+  "12-05": [
+      {"year": 1901, "event": "Werner Heisenberg was born in Würzburg, Germany."},
+      {"year": 2022, "event": "The National Ignition Facility achieved fusion ignition for the first time, producing more energy from a fusion reaction than the laser energy delivered to the target."}
+    ],
+  "12-08": [{"year": 1864, "event": "James Clerk Maxwell read 'A Dynamical Theory of the Electromagnetic Field' to the Royal Society, unifying electricity, magnetism and light."}],
+  "12-10": [
+      {"year": 1901, "event": "Wilhelm Röntgen received the first ever Nobel Prize in Physics, for his discovery of X-rays."},
+      {"year": 1903, "event": "Marie Curie, Pierre Curie and Henri Becquerel were awarded the Nobel Prize in Physics for their work on radioactivity, making Marie Curie the first woman Nobel laureate."},
+      {"year": 1911, "event": "Marie Curie was awarded the Nobel Prize in Chemistry for discovering polonium and radium, becoming the first person to win two Nobel Prizes."},
+      {"year": 2015, "event": "The Wendelstein 7-X stellarator in Germany produced its first plasma."}
+    ],
+  "12-11": [{"year": 1863, "event": "Annie Jump Cannon was born in Dover, Delaware. Her stellar classification scheme, O B A F G K M, is still used today."}],
+  "12-14": [{"year": 1900, "event": "Max Planck presented his quantum hypothesis to the German Physical Society, often marking the birth of quantum theory."}],
+  "12-17": [{"year": 1938, "event": "Otto Hahn and Fritz Strassmann detected barium after bombarding uranium with neutrons, the chemical evidence for nuclear fission."}],
+  "12-19": [{"year": 1852, "event": "Albert Michelson was born in Strzelno, Prussia. He became the first American to win a Nobel Prize in the sciences, for his precision optical measurements."}],
+  "12-20": [{"year": 1951, "event": "Experimental Breeder Reactor I in Idaho generated the first electricity from nuclear power, lighting four light bulbs."}],
+  "12-23": [{"year": 1947, "event": "John Bardeen and Walter Brattain demonstrated the first working transistor at Bell Labs."}],
+  "12-24": [
+      {"year": 1968, "event": "Apollo 8 astronaut Bill Anders took the 'Earthrise' photograph while orbiting the Moon."},
+      {"year": 2024, "event": "The Parker Solar Probe made its closest approach to the Sun, passing within about 6 million kilometres of its surface."}
+    ],
+  "12-25": [
+      {"year": 1642, "event": "Isaac Newton was born in Woolsthorpe, England (Christmas Day by the Julian calendar then used in England)."},
+      {"year": 1758, "event": "Johann Palitzsch spotted the return of Halley's comet, confirming Edmond Halley's prediction made decades earlier."},
+      {"year": 2021, "event": "The James Webb Space Telescope was launched from French Guiana."}
+    ],
+  "12-26": [
+      {"year": 1780, "event": "Mary Somerville was born in Jedburgh, Scotland. Her writing on physical science led her to be described as the first 'scientist', a word coined in a review of her work."},
+      {"year": 1898, "event": "Marie and Pierre Curie announced the discovery of radium."}
+    ],
+  "12-27": [{"year": 1571, "event": "Johannes Kepler was born in Weil der Stadt, in what is now Germany."}],
+  "12-28": [
+      {"year": 1895, "event": "Wilhelm Röntgen submitted his paper announcing the discovery of X-rays."},
+      {"year": 1903, "event": "John von Neumann was born in Budapest. He gave quantum mechanics its rigorous mathematical framework."}
+    ],
+  "12-29": [{"year": 1972, "event": "Edward Lorenz gave his talk asking whether the flap of a butterfly's wings in Brazil could set off a tornado in Texas, popularising chaos theory's 'butterfly effect'."}]
+}

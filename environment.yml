@@ -13,3 +13,4 @@ dependencies:
   - pyfiglet
   - holidays
   - sentence-transformers
+  - transformers

@@ -327,4 +327,5 @@ def run_daily_pipeline() -> None:
     maybe_send_daily_email(papers)
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))  # scheduled runs start in System32 / ~
     run_daily_pipeline()

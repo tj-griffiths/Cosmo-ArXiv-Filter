@@ -1,14 +1,16 @@
 # API Keys
 groq_api_key.txt
 gmail_credentials.txt
+groq_model.txt
+user_config.txt
 
 # Python
 __pycache__/
 *.pyc
 .env
 venv/
-user_config.txt
 cosmo.cmd
+CosmoPapers
 
 # Test
 test_affiliation_coverage.py
@@ -25,3 +27,5 @@ preferences.json
 daily_run_error.log
 daily_run.log
 labels.csv
+starred_papers.json
+.DS_Store

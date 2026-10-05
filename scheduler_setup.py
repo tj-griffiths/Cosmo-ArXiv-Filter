@@ -85,12 +85,14 @@ def _install_macos(cosmo_dir: str, email_script: str, hour: int, minute: int) ->
 
 def _install_windows(email_script: str, hour: int, minute: int) -> None:
     start_time = f"{hour:02d}:{minute:02d}"
+    pythonw = os.path.join(os.path.dirnmaes(sys.executable), "pythonw.exe")
+    interpreter = pythonw if os.path.exists(pythonw) else sys.executable
     subprocess.run(
         [
             "schtasks", "/Create", "/F",
             "/SC", "DAILY",
             "/TN", WINDOWS_TASK_NAME,
-            "/TR", f'"{sys.executable}" "{email_script}"',
+            "/TR", f'"{interpreter}" "{email_script}"',
             "/ST", start_time,
         ],
         check=False, capture_output=True,

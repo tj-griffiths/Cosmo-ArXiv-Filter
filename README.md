@@ -95,7 +95,7 @@ cd ~/Projects
 Then paste this and press Enter:
 
 ```bash
-curl -L https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -o cosmo.zip && unzip cosmo.zip && rm cosmo.zip && cd Cosmo-ArXiv-Filter-main && python3 -m pip install -r requirements.txt && chmod +x install.sh && ./install.sh
+curl -L https://github.com/tj-griffiths/Cosmo-ArXiv-Filter/archive/refs/heads/main.zip -o cosmo.zip && unzip cosmo.zip && rm cosmo.zip && cd Cosmo-ArXiv-Filter-main && chmod +x install.sh && ./install.sh
 ```
 
 `install.sh` adds a `cosmo` alias to your shell profile (`~/.zshrc` or
@@ -175,7 +175,7 @@ Windows:
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-On Windows, this makes the `cosmo` command always use the conda environment. On macOS/Linux, run `conda activate cosmo` before typing `cosmo` each time.
+This makes the `cosmo` command always use the conda environment, so there's no need to activate it each time.
 
 </details>
 

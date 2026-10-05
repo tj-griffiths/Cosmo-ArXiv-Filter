@@ -897,6 +897,7 @@ class FetchScreen(Screen):
 
     BINDINGS = [
         ("c", "continue_to_label", "Continue"),
+        ("enter", "continue_to_label", "Continue"),
         ("h", "help", "Help"),
         ("q", "quit", "Quit"),
     ]
